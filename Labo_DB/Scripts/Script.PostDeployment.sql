@@ -10,30 +10,48 @@ Modèle de script de post-déploiement
 --------------------------------------------------------------------------------------
 */
 
-INSERT INTO [User](FirstName, LastName,Email,Birthdate,Passwd)
+INSERT INTO [dbo].[User](FirstName, LastName, Email, Birthdate, [Password], CreatedAt, UpdatedAt, IsActive) VALUES
+('Benjamin','Sterckx','ben@mail.com','1980-12-10','Test1234=',GETDATE(),NULL,1),
+('Tom','Tom','tom@mail.com','1980-12-10','Test1234=',GETDATE(),NULL,1);
+
+INSERT INTO [dbo].[Account](Number, ReceiverName, Communication, AccountType, IsOwner, UserId)
+--INSERT INTO [Account](Number,ReceiverName,Communication,AccountType,IsOwner,UserId)
 VALUES
-('Benjamin','Sterckx','ben@mail.com','1980-12-10','Test1234='),
-('Tom','Tom','tom@mail.com','1980-12-10','Test1234=');
+('BE10 1010 1010 1010','Tom',Null,'Courant',1,1),
+('BE10 1010 1010 1011','Tom',Null,'Epargne',1,1),
+('BE10 1010 1010 1012','Benjamin',Null,'Courant',1,2),
+('BE10 1010 1010 1013','Benjamin',Null,'Epargbe',1,2);
 
-INSERT INTO [Categorie]([Name])
+INSERT INTO [Budget] (Label,PeriodByMonth,CreatedAt,UpdatedAt,IsActive,UserId)
+VALUES 
+('Bouffe',6,GETDATE(),NULL,1,1),
+('Loisir',12,GETDATE(),NULL,1,2),
+('Loisir',8,GETDATE(),NULL,1,1);
+
+INSERT INTO [Transaction](TotalAmout, CreatedAt, UpdatedAt, IsActive, AccountCreditId, AccountDebitId, BudgetId, ExecutionDate)
+--INSERT INTO [Transaction](TotalAmout,CreatedAt,UpdatedAt,IsActive,AccountCreditId,AccountDebitId,BudgetId,ExecutionDate)
 VALUES
-('Loyer'),
-('Nourriture'),
-('Electricité');
+(100,GETDATE(),NULL,1,1,2,1,GETDATE()),
+(50,GETDATE(),NULL,1,2,1,1,GETDATE()),
+(60,GETDATE(),NULL,1,1,2,1,GETDATE()),
+(20,GETDATE(),NULL,1,2,1,1,GETDATE());
 
 
-INSERT INTO [Account]([Name])
+INSERT INTO [Category]([Label],CreatedAt,UpdatedAt,IsActive) VALUES 
+('Eléctricité',GETDATE(),NULL,1),
+('Loyé',GETDATE(),NULL,1),
+('Nourriture',GETDATE(),NULL,1),
+('Jeux',GETDATE(),NULL,1);
+
+
+INSERT INTO [Transaction_Category](AmoutDetail,CategoryId,TransactionId)
 VALUES
-('BNP'),
-('Fortis'),
-('Dexia');
+(25,1,1),
+(55,2,1),
+(20,3,1);
 
-
-INSERT INTO [Transaction](UserId,AccountId,CategorieId,Amout)
+INSERT INTO [Budget_Category](BudgetId,CategoryId, MaxAmount)
 VALUES
-(1,1,1,100),
-(1,2,2,50),
-(1,3,3,75.5),
-(2,1,1,55.23),
-(2,2,2,65.2),
-(2,3,3,75.5);
+(1,3, 200),
+(2,4, 100),
+(3,4, 300);

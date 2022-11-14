@@ -14,6 +14,7 @@ namespace Labo.Models.Mappers
                 LastName = (string)reader["LastName"],
                 Birthdate = (DateTime)reader["Birthdate"],
                 Email = (string)reader["Email"],
+                CreatedAt = (DateTime)reader["CreatedAt"],
             };
         }
 

@@ -22,61 +22,58 @@ namespace Labo.Controllers
             _logger = logger;
         }
 
-        //[HttpGet("GetAll")]
-        //public IActionResult GetAll()
-        //{
-        //    Command command = new Command("SELECT Id, LastName, FirstName, Email, Birthdate FROM [User];", false);
+        [HttpGet("GetAll")]
+        public IActionResult GetAll()
+        {
+            Command command = new Command("SELECT Id, LastName, FirstName, Email, Birthdate, CreatedAt FROM [User];", false);
 
-        //    try
-        //    {
-        //        return Ok(_connection.ExecuteReader(command, dr => dr.ToUser()).ToList());
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, ex.Message);
-        //        return BadRequest(new { Message = "Un probleme est survenu lors de la recuperation des données, contactez l'admin" });
-        //    }
-        //}
+            try
+            {
+                return Ok(_connection.ExecuteReader(command, dr => dr.ToUser()).ToList());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return BadRequest(new { Message = "Un probleme est survenu lors de la recuperation des données, contactez l'admin" });
+            }
+        }
 
-        //[HttpGet("GetById/{id}")]
-        //public IActionResult GetById(int id)
-        //{
-        //    Command command = new Command("SELECT Id, LastName, FirstName, Email, Birthdate FROM [User] WHERE Id = @Id;", false);
-        //    command.AddParameter("Id", id);
-        //    try
-        //    {
-        //        return Ok(_connection.ExecuteReader(command, dr => dr.ToUser()).SingleOrDefault());
-        //    }
-        //    catch (Exception ex)
-        //    {
+        [HttpGet("GetById/{id}")]
+        public IActionResult GetById(int id)
+        {
+            Command command = new Command("SELECT Id, LastName, FirstName, Email, Birthdate, CreatedAt FROM [User] WHERE Id = @Id;", false);
+            command.AddParameter("Id", id);
+            try
+            {
+                return Ok(_connection.ExecuteReader(command, dr => dr.ToUser()).SingleOrDefault());
+            }
+            catch (Exception ex)
+            {
 
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
+                return BadRequest(ex.Message);
+            }
+        }
+
+        
 
         [HttpPost("Insert")]
         public IActionResult Insert(AddUserForm form)
         {
-            Command command = new Command("INSERT INTO [User](LastName, FirstName, Email, Birthdate, Passwd) OUTPUT inserted.id VALUES(@LastName, @FirstName, @Email, @Birthdate, @Password)", false);
+
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(form.Password);
+
+            Command command = new Command("SP_InsertUser", true);
             command.AddParameter("LastName", form.LastName);
             command.AddParameter("FirstName", form.FirstName);
             command.AddParameter("Email", form.Email);
             command.AddParameter("Birthdate", form.Birthdate);
-            command.AddParameter("Password", form.Password);
+            command.AddParameter("Password", passwordHash);
 
             int? id = (int?)_connection.ExecuteScalar(command); // recuperer l'id du contact inseré
 
             if (id.HasValue)
             {
-                User user = new User()
-                {
-                    Id = id.Value,
-                    FirstName = form.FirstName,
-                    Email = form.Email,
-                    Birthdate = form.Birthdate,
-                    LastName = form.LastName,
-
-                };
+                User? user = GetUserById(id.Value);
                 return Ok(user);
             }
             else
@@ -86,106 +83,55 @@ namespace Labo.Controllers
         }
 
 
-        //[HttpPut("Update/{id}")]
-        //public IActionResult Update(int id, UpdateUserForm form)
-        //{
-        //    string sqlcommand = "";
-        //    bool isFirstName = false;
-        //    bool isLastName = false;
-        //    bool isEmail = false;
-        //    bool isBrithdate = false;
+        [HttpPut("Update/{id}")]
+        public IActionResult Update(int id, UpdateUserForm form)
+        {
+         
+            Command command = new Command($"SP_UpdateUser", true);
+            command.AddParameter("Id", id);
+            command.AddParameter("FirstName", form.FirstName);
+            command.AddParameter("Email", form.Email);
+            command.AddParameter("Birthdate", form.Birthdate);
+            command.AddParameter("LastName", form.LastName);
 
-        //    User user = GetUserById(id);
+            int? resultid = (int?)_connection.ExecuteScalar(command);
 
-        //    if (form.FirstName != user.FirstName)
-        //    {
-        //        sqlcommand += " FirstName = @FirstName ";
-        //        isFirstName = true;
-        //    }
+            if (!resultid.HasValue) return BadRequest(new { Message = "l'insertion a échoué" });
+             
+            User? newuser = GetUserById(resultid.Value);
 
-        //    if (form.LastName != user.LastName)
-        //    {
-        //        if (isFirstName) sqlcommand += ",";
-        //        sqlcommand += " LastName = @LastName ";
-        //        isLastName = true;
-        //    }
+            if(newuser is null ) return BadRequest(new { Message = "le nouvel utilisateur n'a pas été trouvé" });
 
-        //    if (form.Email != user.Email)
-        //    {
-        //        if (isLastName || isFirstName) sqlcommand += ",";
-        //        sqlcommand += " Email = @Email ";
-        //        isEmail = true;
-        //    }
+            return Ok(newuser);
+                   
+        }
 
-        //    if (form.Birthdate != user.Birthdate)
-        //    {
-        //        if (isEmail || isLastName || isFirstName) sqlcommand += ",";
-        //        sqlcommand += " Birthdate = @Birthdate ";
-        //        isBrithdate = true;
-        //    }
+        [HttpDelete("Delete/{id}")]
+        public IActionResult Delete(int id)
+        {
+            Command command = new Command("DELETE FROM [User] WHERE Id=@Id", false);
+            command.AddParameter("Id", id);
+            try
+            {
+                return Ok(_connection.ExecuteNonQuery(command)); // renvois le nombre de ligne affectés
 
-        //    if (isLastName || isFirstName || isEmail || isBrithdate)
-        //    {
-        //        Command command = new Command($"UPDATE [User] SET {sqlcommand} OUTPUT inserted.id WHERE Id = @Id", false);
-        //        command.AddParameter("Id", id);
-        //        if (isFirstName) command.AddParameter("FirstName", form.FirstName);
-        //        if (isEmail) command.AddParameter("Email", form.Email);
-        //        if (isBrithdate) command.AddParameter("Birthdate", form.Birthdate);
-        //        if (isLastName) command.AddParameter("LastName", form.LastName);
-
-        //        int? resultid = (int?)_connection.ExecuteScalar(command);
-
-        //        if (resultid.HasValue)
-        //        {
-        //            User newUser = new User()
-        //            {
-        //                Id = resultid.Value,
-        //                FirstName = form.FirstName,
-        //                Email = form.Email,
-        //                Birthdate = form.Birthdate,
-        //                LastName = form.LastName,
-
-        //            };
-
-        //            return Ok(newUser);
-        //        }
-        //        else
-        //        {
-        //            return BadRequest(new { Message = "l'insertion a échoué" });
-        //        }
-        //    }
-        //    else
-        //    {
-        //        return BadRequest(new { Message = "rien n'a ete modifié" });
-        //    }
-        //}
-
-        //[HttpDelete("Delete/{id}")]
-        //public IActionResult Delete(int id)
-        //{
-        //    Command command = new Command("DELETE FROM [User] WHERE Id=@Id", false);
-        //    command.AddParameter("Id", id);
-        //    try
-        //    {
-        //        return Ok(_connection.ExecuteNonQuery(command)); // renvois le nombre de ligne affectés
-
-        //    }
-        //    catch (DbException ex)
-        //    {
-        //        _logger.LogError(ex, ex.Message);
-        //        return BadRequest(new { Message = "Un probleme est survenu lors de la suppression, contactez l'admin" });
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, ex.Message);
-        //        return BadRequest(new { Message = "Un probleme est survenu, contactez l'admin" });
-        //    }
-        //}
+            }
+            catch (DbException ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return BadRequest(new { Message = "Un probleme est survenu lors de la suppression, contactez l'admin" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return BadRequest(new { Message = "Un probleme est survenu, contactez l'admin" });
+            }
+        }
 
 
         private User? GetUserById(int id)
         {
-            Command command = new Command("SELECT Id, LastName, FirstName, Email, Birthdate FROM [User] WHERE Id = @Id;", false);
+            Command command = new Command("SELECT Id, LastName, FirstName, Email, Birthdate, CreatedAt FROM [User] WHERE Id = @Id;", false);
             command.AddParameter("Id", id);
             try
             {

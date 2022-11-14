@@ -24,17 +24,27 @@ namespace Labo.Controllers
         [HttpPost]
         public IActionResult Login(LoginForm form)
         {
-            Command command = new Command("SELECT Id, LastName, FirstName, Email, Birthdate FROM [User] WHERE Email = @Email AND Passwd = @Password", false);
+            Command command = new Command("SELECT Password FROM [User] WHERE Email = @Email ", false);
             command.AddParameter("Email", form.Email);
-            command.AddParameter("Password", form.Password);
 
+            string? passwordHash = (string?)_connection.ExecuteScalar(command);
+
+            if(passwordHash is null)  return BadRequest("L'email est invailde");
+
+            bool verified = BCrypt.Net.BCrypt.Verify(form.Password, passwordHash);
+
+            if (!verified) return BadRequest("Le mot de passe est invailde");
+            
+            Command command2 = new Command("SELECT Id, LastName, FirstName, Email, Birthdate,CreatedAt FROM [User] WHERE Email = @Email", false);
+            command2.AddParameter("Email", form.Email);
+         
             try
             {
-                User? user = _connection.ExecuteReader(command, dr => dr.ToUser()).SingleOrDefault();
+                User? user = _connection.ExecuteReader(command2, dr => dr.ToUser()).SingleOrDefault();
 
-                if (user == null)
+                if (user is null)
                 {
-                    return BadRequest(new { Message = "Email ou mot de passe incorrect " });
+                    return BadRequest(new { Message = "L'utilisateur n'a pas été trouvé " });
                 }
                 return Ok(user);
             }
