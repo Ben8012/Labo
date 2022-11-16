@@ -1,4 +1,4 @@
-﻿namespace Labo.Models.Forms
+﻿namespace Labo.Models.Forms.Transaction
 {
     public class UpdateTransactionForm
     {

@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Labo.Models.Forms
+namespace DAL.Models.Forms
 {
-    public class UpdateUserForm
+    public class UpdateUserFormDal
     {
+        [Required]
+        public int Id { get; set; }
         [Required]
         [MinLength(1)]
         [MaxLength(50)]

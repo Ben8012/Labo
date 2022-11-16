@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Labo.Models.Forms
+namespace DAL.Models.Forms
 {
-    public class LoginForm
+    public class LoginFormDal
     {
         [Required]
         [EmailAddress]

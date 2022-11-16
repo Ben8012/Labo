@@ -1,5 +1,9 @@
-﻿using Labo.Models;
+﻿using BLL.Interfaces;
+using labo.Tools;
+using Labo.Models;
+using Labo.Models.DTO.User;
 using Labo.Models.Forms;
+using Labo.Models.Forms.User;
 using Labo.Models.Mappers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,44 +17,40 @@ namespace Labo.Controllers
     public class UserController : ControllerBase
     {
 
-        private readonly Connection _connection;
+        private readonly IUserBll _userBll;
         private readonly ILogger _logger;
+        private readonly ITokenManager _token;
 
-        public UserController(ILogger<UserController> logger, Connection connection)
+        public UserController(ILogger<UserController> logger, IUserBll userBll, ITokenManager token)
         {
-            _connection = connection;
+            _userBll = userBll;
             _logger = logger;
+            _token = token;
         }
 
         [HttpGet("GetAll")]
         public IActionResult GetAll()
         {
-            Command command = new Command("SELECT Id, LastName, FirstName, Email, Birthdate, CreatedAt FROM [User];", false);
-
             try
             {
-                return Ok(_connection.ExecuteReader(command, dr => dr.ToUser()).ToList());
+                return Ok(_userBll.GetAll().Select(u => u.ToUser()));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
-                return BadRequest(new { Message = "Un probleme est survenu lors de la recuperation des données, contactez l'admin" });
+                return BadRequest(new { Message = "l'operation a echoué, contactez l'admin" , ErrorMessage = ex.Message });
             }
         }
 
         [HttpGet("GetById/{id}")]
         public IActionResult GetById(int id)
         {
-            Command command = new Command("SELECT Id, LastName, FirstName, Email, Birthdate, CreatedAt FROM [User] WHERE Id = @Id;", false);
-            command.AddParameter("Id", id);
             try
             {
-                return Ok(_connection.ExecuteReader(command, dr => dr.ToUser()).SingleOrDefault());
+                return Ok(_userBll.GetById(id)?.ToUser());
             }
             catch (Exception ex)
             {
-
-                return BadRequest(ex.Message);
+                return BadRequest(new { Message = "l'operation a echoué, contactez l'admin", ErrorMessage =  ex.Message });
             }
         }
 
@@ -59,91 +59,81 @@ namespace Labo.Controllers
         [HttpPost("Insert")]
         public IActionResult Insert(AddUserForm form)
         {
+            if(!ModelState.IsValid) return BadRequest(new {Message = "ModelState insert est invalide"});
 
-            string passwordHash = BCrypt.Net.BCrypt.HashPassword(form.Password);
-
-            Command command = new Command("SP_InsertUser", true);
-            command.AddParameter("LastName", form.LastName);
-            command.AddParameter("FirstName", form.FirstName);
-            command.AddParameter("Email", form.Email);
-            command.AddParameter("Birthdate", form.Birthdate);
-            command.AddParameter("Password", passwordHash);
-
-            int? id = (int?)_connection.ExecuteScalar(command); // recuperer l'id du contact inseré
-
-            if (id.HasValue)
+            form.Password = BCrypt.Net.BCrypt.HashPassword(form.Password);
+            try
             {
-                User? user = GetUserById(id.Value);
-                return Ok(user);
+                return Ok(_userBll.Insert(form.ToAddUserFromBll())?.ToUser());
             }
-            else
+            catch (Exception ex)
             {
-                return BadRequest(new { Message = "l'insertion a échoué" });
+                return BadRequest(new { Message = "l'insertion a échoué, contactez l'admin", ErrorMessage = ex.Message });
             }
+
         }
 
 
-        [HttpPut("Update/{id}")]
-        public IActionResult Update(int id, UpdateUserForm form)
+        [HttpPut("Update")]
+        public IActionResult Update(UpdateUserForm form)
         {
-         
-            Command command = new Command($"SP_UpdateUser", true);
-            command.AddParameter("Id", id);
-            command.AddParameter("FirstName", form.FirstName);
-            command.AddParameter("Email", form.Email);
-            command.AddParameter("Birthdate", form.Birthdate);
-            command.AddParameter("LastName", form.LastName);
-
-            int? resultid = (int?)_connection.ExecuteScalar(command);
-
-            if (!resultid.HasValue) return BadRequest(new { Message = "l'insertion a échoué" });
-             
-            User? newuser = GetUserById(resultid.Value);
-
-            if(newuser is null ) return BadRequest(new { Message = "le nouvel utilisateur n'a pas été trouvé" });
-
-            return Ok(newuser);
+            if (!ModelState.IsValid) return BadRequest(new { Message = "ModelState update est invalide" });
+            try
+            {
+                return Ok(_userBll.Update(form.ToUpdateUserFormBll())?.ToUser());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = "la modification a échoué, contactez l'admin", ErrorMessage = ex.Message });
+            }
                    
         }
 
         [HttpDelete("Delete/{id}")]
         public IActionResult Delete(int id)
         {
-            Command command = new Command("DELETE FROM [User] WHERE Id=@Id", false);
-            command.AddParameter("Id", id);
             try
             {
-                return Ok(_connection.ExecuteNonQuery(command)); // renvois le nombre de ligne affectés
+                return Ok(_userBll.Delete(id));
 
-            }
-            catch (DbException ex)
-            {
-                _logger.LogError(ex, ex.Message);
-                return BadRequest(new { Message = "Un probleme est survenu lors de la suppression, contactez l'admin" });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
-                return BadRequest(new { Message = "Un probleme est survenu, contactez l'admin" });
+                return BadRequest(new { Message = "la suppression a échoué, contactez l'admin", ErrorMessage = ex.Message });
             }
         }
 
-
-        private User? GetUserById(int id)
+        [HttpPost("Login")]
+        public IActionResult Login(LoginForm form)
         {
-            Command command = new Command("SELECT Id, LastName, FirstName, Email, Birthdate, CreatedAt FROM [User] WHERE Id = @Id;", false);
-            command.AddParameter("Id", id);
+            if (!ModelState.IsValid) return BadRequest(new { Message = "ModelState Login est invalide" });
             try
             {
-                return _connection.ExecuteReader(command, dr => dr.ToUser()).SingleOrDefault();
+                User? user = _userBll.Login(form.ToLoginFormBll()).ToUser();
+
+                if (user is null)
+                {
+                    return BadRequest(new { Message = "L'utilisateur n'a pas été trouvé " });
+                }
+                UserWithToken userWithToken = new UserWithToken()
+                {
+                    Id = user.Id,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    Birthdate = user.Birthdate,
+                    CreatedAt = user.CreatedAt,
+                    UpdatedAt = user.UpdatedAt,
+                    Token = _token.GenerateJWTUser(user)
+                };
+
+                return Ok(user);
             }
             catch (Exception ex)
             {
-
-                return null;
+                return BadRequest(new { Message = "le login a échoué, contactez l'admin", ErrorMessage = ex.Message });
             }
         }
-
 
     }
 }

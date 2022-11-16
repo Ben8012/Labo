@@ -1,6 +1,6 @@
-﻿namespace Labo.Models
+﻿namespace BLL.Models.Forms
 {
-    public class User
+    public class InsertUserBll
     {
         public int Id { get; set; }
         public string? LastName { get; set; }

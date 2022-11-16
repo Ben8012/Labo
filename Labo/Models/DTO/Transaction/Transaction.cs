@@ -1,4 +1,4 @@
-﻿namespace Labo.Models
+﻿namespace Labo.Models.DTO.Transaction
 {
     public class Transaction
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Labo.Models.Forms
+namespace Labo.Models.Forms.Transaction
 {
     public class AddTransationForm
     {
