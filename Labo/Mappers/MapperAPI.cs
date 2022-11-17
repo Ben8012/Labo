@@ -1,7 +1,9 @@
 ﻿using BLL.Models.DTO.Account;
+using BLL.Models.DTO.Transaction;
 using BLL.Models.DTO.User;
 using BLL.Models.Forms;
 using BLL.Models.Forms.Account;
+using Labo.Models.DTO.Transaction;
 using Labo.Models.DTO.User;
 using Labo.Models.Forms.Account;
 using Labo.Models.Forms.User;
@@ -89,6 +91,36 @@ namespace Labo.Models.Mappers
                 Communication = accountForm.Communication,
                 IsOwner = accountForm.IsOwner,
                 UserId = accountForm.UserId,
+            };
+        }
+
+        internal static AllInfoCreditUser ToGetAllInfoCreditByUserDal(this AllInfoCreditUserBll allInfoCreditByUserDal)
+        {
+            return new AllInfoCreditUser()
+            {
+                FirstName = allInfoCreditByUserDal.FirstName,
+                LastName = allInfoCreditByUserDal.LastName,
+                ExecutionDate = allInfoCreditByUserDal.ExecutionDate,
+                BudgetLabel = allInfoCreditByUserDal.BudgetLabel,
+                Communication = allInfoCreditByUserDal.Communication,
+                BudgetPeriode = allInfoCreditByUserDal.BudgetPeriode,
+                TotalAmount = allInfoCreditByUserDal.TotalAmount,
+                Number = allInfoCreditByUserDal.Number,
+                ReceiverName = allInfoCreditByUserDal.ReceiverName
+            };
+        }
+
+        internal static UpdateAccountFormBll ToUpdateAccountFormBll(this UpdateAccountForm account)
+        {
+            return new UpdateAccountFormBll()
+            {
+                Id = account.Id,
+                Number = account.Number,
+                AccountType = account.AccountType,
+                ReceiverName = account.ReceiverName,
+                Communication = account.Communication,
+                IsOwner = account.IsOwner,
+                UserId = account.UserId,
             };
         }
     }

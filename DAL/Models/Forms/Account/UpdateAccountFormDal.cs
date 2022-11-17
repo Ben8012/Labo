@@ -14,6 +14,6 @@ namespace DAL.Models.Forms.Account
         public string ReceiverName { get; set; }
         public string? Communication { get; set; }
         public bool IsOwner { get; set; }
-        public UserDal User { get; set; }
+        public int UserId { get; set; }
     }
 }

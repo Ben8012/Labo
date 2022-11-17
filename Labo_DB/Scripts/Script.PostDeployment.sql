@@ -14,13 +14,13 @@ INSERT INTO [dbo].[User](FirstName, LastName, Email, Birthdate, [Password], Crea
 ('Benjamin','Sterckx','ben@mail.com','1980-12-10','Test1234=',GETDATE(),NULL,1),
 ('Tom','Tom','tom@mail.com','1980-12-10','Test1234=',GETDATE(),NULL,1);
 
-INSERT INTO [dbo].[Account](Number, ReceiverName, Communication, AccountType, IsOwner, UserId)
+INSERT INTO [dbo].[Account](Number, ReceiverName, Communication, AccountType, IsOwner, UserId, IsActive)
 --INSERT INTO [Account](Number,ReceiverName,Communication,AccountType,IsOwner,UserId)
 VALUES
-('BE10 1010 1010 1010','Tom',Null,'Courant',1,1),
-('BE10 1010 1010 1011','Tom',Null,'Epargne',1,1),
-('BE10 1010 1010 1012','Benjamin',Null,'Courant',1,2),
-('BE10 1010 1010 1013','Benjamin',Null,'Epargbe',1,2);
+('BE10 1010 1010 1010','Tom',Null,'Courant',1,1,1),
+('BE10 1010 1010 1011','Tom',Null,'Epargne',1,1,1),
+('BE10 1010 1010 1012','Benjamin',Null,'Courant',1,2,1),
+('BE10 1010 1010 1013','Benjamin',Null,'Epargne',1,2,1);
 
 INSERT INTO [Budget] (Label,PeriodByMonth,CreatedAt,UpdatedAt,IsActive,UserId)
 VALUES 

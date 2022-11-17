@@ -24,10 +24,57 @@ namespace DAL.Services
             _logger = logger;
         }
 
+        public int Delete(int id)
+        {
+            int nbligne;
+            Command command = new Command("DELETE FROM [Account] WHERE Id = @Id", false);
+            command.AddParameter("id", id);
+            try
+            {
+                nbligne = _connection.ExecuteNonQuery(command);
+                if (nbligne != 0) return -1;
+                return nbligne;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public int Desactivate(int id)
         {
-            //Command command = new Command("UPDATE [Account] SET ", false);
-            return 0;
+            Command command = new Command("UPDATE [Account] SET IsActive = 0 WHERE @Id= Id", false);
+            command.AddParameter("id", id);
+
+            int nbligne;
+            try
+            {
+                nbligne = _connection.ExecuteNonQuery(command);
+                if (nbligne != 1) return -1;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return nbligne;
+        }
+
+        public int Reactivate(int id)
+        {
+            Command command = new Command("UPDATE [Account] SET IsActive = 1 WHERE @Id= Id", false);
+            command.AddParameter("id", id);
+
+            int nbligne;
+            try
+            {
+                nbligne = _connection.ExecuteNonQuery(command);
+                if (nbligne != 1) return -1;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return nbligne;
         }
 
         public List<AccountDal> GetAll()
@@ -70,13 +117,14 @@ namespace DAL.Services
 
         public AccountDal Insert(AddAccountFormDal addAccountFormDal)
         {
-            Command command = new Command("INSERT INTO [Account](Number, AccountType, ReceiverName, Communication, IsOwner, UserId) OUTPUT inserted.id VALUES (@Number, @AccountType, @ReceiverName, @Communication, @IsOwner, @UserId)", false);
+            Command command = new Command("INSERT INTO [Account](Number, AccountType, ReceiverName, Communication, IsOwner, UserId,IsActive ) OUTPUT inserted.id VALUES (@Number, @AccountType, @ReceiverName, @Communication, @IsOwner, @UserId, @IsActive)", false);
             command.AddParameter("Number", addAccountFormDal.Number);
             command.AddParameter("AccountType", addAccountFormDal.AccountType);
             command.AddParameter("ReceiverName", addAccountFormDal.ReceiverName);
             command.AddParameter("Communication", addAccountFormDal.Communication);
             command.AddParameter("IsOwner", addAccountFormDal.IsOwner);
             command.AddParameter("UserId", addAccountFormDal.UserId);
+            command.AddParameter("IsActive", 1);
 
             try
             {
@@ -92,9 +140,32 @@ namespace DAL.Services
             }
         }
 
+      
+
         public AccountDal Update(UpdateAccountFormDal updateAccountFormDal)
         {
-            throw new NotImplementedException();
+            Command command = new Command("SP_UpdateAccount", true);
+            command.AddParameter("Number", updateAccountFormDal.Number);
+            command.AddParameter("AccountType", updateAccountFormDal.AccountType);
+            command.AddParameter("ReceiverName", updateAccountFormDal.ReceiverName);
+            command.AddParameter("Communication", updateAccountFormDal.Communication);
+            command.AddParameter("UserId", updateAccountFormDal.UserId);
+            command.AddParameter("Id", updateAccountFormDal.Id);
+            command.AddParameter("IsOwner", updateAccountFormDal.IsOwner);
+
+            try
+            {
+               int? resultid = (int?)_connection.ExecuteScalar(command);
+                if (!resultid.HasValue) throw new Exception("probleme de recuperation de l'id lors de la mise a jour");
+                AccountDal? account = GetAccountById(resultid.Value);
+                if (account is null) throw new Exception("probleme de recuperation de l'utilisateur lors de la mise a jour");
+                return account;
+           
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
 

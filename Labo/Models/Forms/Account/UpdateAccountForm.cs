@@ -1,8 +1,12 @@
-﻿using Labo.Models.DTO.User;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Labo.Models
+namespace Labo.Models.Forms.Account
 {
-    public class Account
+    public class UpdateAccountForm
     {
         public int Id { get; set; }
         public string Number { get; set; }
@@ -10,6 +14,6 @@ namespace Labo.Models
         public string ReceiverName { get; set; }
         public string? Communication { get; set; }
         public bool IsOwner { get; set; }
-        public User User { get; set; }
+        public int UserId { get; set; }
     }
 }

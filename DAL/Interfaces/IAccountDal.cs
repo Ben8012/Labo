@@ -18,8 +18,10 @@ namespace DAL.Interfaces
 
         AccountDal Update(UpdateAccountFormDal updateAccountFormDal);
 
-        //int Delete(int id);
+        int Delete(int id);
 
         int Desactivate(int id);
+
+        int Reactivate(int id);
     }
 }

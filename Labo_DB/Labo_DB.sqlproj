@@ -75,6 +75,7 @@
     <Build Include="Tables\Transaction.sql" />
     <Build Include="StoreProcedures\SP_InsertUser.sql" />
     <Build Include="StoreProcedures\SP_UpdateUser.sql" />
+    <Build Include="StoreProcedures\SP_UpdateAccount.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\Script.PreDeployment.sql" />

@@ -42,5 +42,60 @@ namespace Labo.Controllers
                 return BadRequest(new { Message = "l'operation a echoué, contactez l'admin", ErrorMessage = ex.Message });
             }
         }
+
+        [HttpPost("Desactivate")]
+        public IActionResult Desactivate(int id)
+        {
+            try
+            {
+                return Ok(_accountBll.Desactivate(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = "l'operation a echoué, contactez l'admin", ErrorMessage = ex.Message });
+            }
+        }
+
+
+        [HttpPost("Reactivate")]
+        public IActionResult Reactivate(int id)
+        {
+            try
+            {
+                return Ok(_accountBll.Reactivate(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = "l'operation a echoué, contactez l'admin", ErrorMessage = ex.Message });
+            }
+        }
+
+        [HttpPost("Delete/{id}")]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                return Ok(_accountBll.Delete(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = "l'operation a echoué, contactez l'admin", ErrorMessage = ex.Message });
+            }
+        }
+
+        [HttpPut("Update")]
+        public IActionResult Update(UpdateAccountForm updateAccountForm)
+        {
+            try
+            {
+                return Ok(_accountBll.Update(updateAccountForm.ToUpdateAccountFormBll()).ToAccount());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = "l'operation a echoué, contactez l'admin", ErrorMessage = ex.Message });
+            }
+        }
+
+
     }
 }

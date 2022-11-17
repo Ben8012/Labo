@@ -20,9 +20,19 @@ namespace BLL.Services
             _accountDal = accountDal;
         }
 
+        public int Delete(int id)
+        {
+            return _accountDal.Delete(id);
+        }
+
         public int Desactivate(int id)
         {
-            throw new NotImplementedException();
+            return _accountDal.Desactivate(id);
+        }
+
+        public int Reactivate(int id)
+        {
+            return _accountDal.Reactivate(id);
         }
 
         public List<AccountBll> GetAll()
@@ -32,12 +42,12 @@ namespace BLL.Services
 
         public AccountBll Insert(AddAccountFormBll addAccountFormBll)
         {
-            return _accountDal.Insert(addAccountFormBll.ToaddAccountFormDal()).ToAccountBll();
+            return _accountDal.Insert(addAccountFormBll.ToAddAccountFormDal()).ToAccountBll();
         }
 
         public AccountBll Update(UpdateAccountFormBll updateAccountFormBll)
         {
-            throw new NotImplementedException();
+            return _accountDal.Update(updateAccountFormBll.ToUpdateAccountFormDal()).ToAccountBll();
         }
     }
 }

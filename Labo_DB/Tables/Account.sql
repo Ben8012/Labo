@@ -7,5 +7,6 @@
     [Communication] NVARCHAR(MAX) NULL, 
     [IsOwner] BIT NOT NULL, 
     [UserId] INT NOT NULL
-    CONSTRAINT [FK_Account_ToUser] FOREIGN KEY ([UserId]) REFERENCES [User]([Id])
+    CONSTRAINT [FK_Account_ToUser] FOREIGN KEY ([UserId]) REFERENCES [User]([Id]), 
+    [IsActive] BIT NOT NULL
 )

@@ -16,8 +16,10 @@ namespace BLL.Interfaces
 
         AccountBll Update(UpdateAccountFormBll updateAccountFormBll);
 
-        //int Delete(int id);
+        int Delete(int id);
 
         int Desactivate(int id);
+
+        int Reactivate(int id);
     }
 }

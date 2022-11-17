@@ -28,6 +28,10 @@ builder.Services.AddScoped<IUserBll, UserBllService>();
 builder.Services.AddScoped<IAccountDal, AccountDalService>();
 builder.Services.AddScoped<IAccountBll, AccountBllService>();
 
+//injection Transaction
+builder.Services.AddScoped<ITransactionDal, TransactionDalService>();
+builder.Services.AddScoped<ITransactionBll, TransactionBllService>();
+
 string connectionString = builder.Configuration.GetConnectionString("Labo");
 // service de connection a la base de donnée
 builder.Services.AddTransient<Connection>(sp => new Connection(SqlClientFactory.Instance, connectionString));// addTransient == une instance par demande

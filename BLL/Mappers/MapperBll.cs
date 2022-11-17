@@ -1,9 +1,11 @@
 ﻿using BLL.Models.DTO.Account;
+using BLL.Models.DTO.Transaction;
 using BLL.Models.DTO.User;
 using BLL.Models.Forms;
 using BLL.Models.Forms.Account;
 using DAL.Models;
 using DAL.Models.DTO.Account;
+using DAL.Models.DTO.Transaction;
 using DAL.Models.Forms;
 using DAL.Models.Forms.Account;
 using System;
@@ -87,7 +89,7 @@ namespace BLL.Mappers
             };
         }
 
-        internal static AddAccountFormDal ToaddAccountFormDal(this AddAccountFormBll accountBll)
+        internal static AddAccountFormDal ToAddAccountFormDal(this AddAccountFormBll accountBll)
         {
             return new AddAccountFormDal()
             {
@@ -97,6 +99,37 @@ namespace BLL.Mappers
                 Communication = accountBll.Communication,
                 IsOwner = accountBll.IsOwner,
                 UserId = accountBll.UserId,
+            };
+        }
+
+
+        internal static UpdateAccountFormDal ToUpdateAccountFormDal(this UpdateAccountFormBll accountBll)
+        {
+            return new UpdateAccountFormDal()
+            {
+                Id = accountBll.Id,
+                Number = accountBll.Number,
+                AccountType = accountBll.AccountType,
+                ReceiverName = accountBll.ReceiverName,
+                Communication = accountBll.Communication,
+                IsOwner = accountBll.IsOwner,
+                UserId = accountBll.UserId,
+            };
+        }
+
+        internal static AllInfoCreditUserBll ToGetAllInfoCreditByUserDal(this AllInfoCreditUserDal allInfoCreditByUserDal)
+        {
+            return new AllInfoCreditUserBll()
+            {
+                FirstName = allInfoCreditByUserDal.FirstName,
+                LastName = allInfoCreditByUserDal.LastName,
+                ExecutionDate = allInfoCreditByUserDal.ExecutionDate,
+                BudgetLabel = allInfoCreditByUserDal.BudgetLabel,
+                Communication = allInfoCreditByUserDal.Communication,
+                BudgetPeriode = allInfoCreditByUserDal.BudgetPeriode,
+                TotalAmount = allInfoCreditByUserDal.TotalAmount,
+                Number = allInfoCreditByUserDal.Number,
+                ReceiverName = allInfoCreditByUserDal.ReceiverName
             };
         }
 
