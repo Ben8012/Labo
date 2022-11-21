@@ -22,9 +22,15 @@ namespace BLL.Services
             _logger = logger;
         }
 
-        public IEnumerable<AllInfoCreditUserBll> GetAllInfoCreditByUser(int Id)
+        public IEnumerable<TransactionBudgetAccountsCategoryBll> GetTransactionByAccountCredit(int id)
         {
-            return _transactionDal.GetAllInfoCreditByUser(Id).Select(a => a.ToGetAllInfoCreditByUserDal());
+            return _transactionDal.GetTransactionByAccountCredit(id).Select(t => t.ToTransactionBll());
+        }
+
+        public IEnumerable<TransactionBudgetAccountsCategoryBll> GetTransactionByAccountDebit(int id)
+        {
+            return _transactionDal.GetTransactionByAccountDebit(id).Select(t => t.ToTransactionBll());
+            
         }
     }
 }

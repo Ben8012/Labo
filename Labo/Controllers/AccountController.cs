@@ -1,6 +1,6 @@
 ﻿using BLL.Interfaces;
 using Labo.Models.Forms.Account;
-using Labo.Models.Mappers;
+using Labo.Mappers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

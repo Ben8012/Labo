@@ -9,6 +9,7 @@ namespace BLL.Interfaces
 {
     public interface ITransactionBll
     {
-        IEnumerable<AllInfoCreditUserBll> GetAllInfoCreditByUser(int Id);
+        IEnumerable<TransactionBudgetAccountsCategoryBll> GetTransactionByAccountDebit(int id);
+        IEnumerable<TransactionBudgetAccountsCategoryBll> GetTransactionByAccountCredit(int id);
     }
 }

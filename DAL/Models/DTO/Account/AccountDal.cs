@@ -14,7 +14,8 @@ namespace DAL.Models.DTO.Account
         public string ReceiverName { get; set; }
         public string? Communication { get; set; }
         public bool IsOwner { get; set; }
-
+        public bool IsAcive { get; set; }
         public UserDal User { get; set; }
+
     }
 }

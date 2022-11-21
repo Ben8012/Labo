@@ -1,10 +1,10 @@
 ﻿using BLL.Interfaces;
 using labo.Tools;
 using Labo.Models;
-using Labo.Models.DTO.User;
+using Labo.Models.DTO.UserAPI;
 using Labo.Models.Forms;
 using Labo.Models.Forms.User;
-using Labo.Models.Mappers;
+using Labo.Mappers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Data.Common;

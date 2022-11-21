@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[Transaction]
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
-    [TotalAmout] FLOAT NOT NULL, 
+    [TotalAmount] FLOAT NOT NULL, 
     [CreatedAt] DATETIME2 NOT NULL, 
     [UpdatedAt] DATETIME2 NULL, 
     [IsActive] BIT NOT NULL, 

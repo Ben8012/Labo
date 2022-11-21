@@ -28,7 +28,7 @@ VALUES
 ('Loisir',12,GETDATE(),NULL,1,2),
 ('Loisir',8,GETDATE(),NULL,1,1);
 
-INSERT INTO [Transaction](TotalAmout, CreatedAt, UpdatedAt, IsActive, AccountCreditId, AccountDebitId, BudgetId, ExecutionDate)
+INSERT INTO [Transaction](TotalAmount, CreatedAt, UpdatedAt, IsActive, AccountCreditId, AccountDebitId, BudgetId, ExecutionDate)
 --INSERT INTO [Transaction](TotalAmout,CreatedAt,UpdatedAt,IsActive,AccountCreditId,AccountDebitId,BudgetId,ExecutionDate)
 VALUES
 (100,GETDATE(),NULL,1,1,2,1,GETDATE()),

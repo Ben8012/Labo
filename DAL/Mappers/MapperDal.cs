@@ -47,22 +47,41 @@ namespace DAL.Mappers
         }
 
 
-        internal static AllInfoCreditUserDal ToAllInfosCreditUser(this DbDataReader reader)
+        internal static TransactionDal ToTransaction(this DbDataReader reader)
         {
-            return new AllInfoCreditUserDal()
+            return new TransactionDal()
             {
-                FirstName = (string)reader["FirstName"],
-                LastName = (string)reader["LastName"],
-                ExecutionDate = (DateTime)reader["ExecutionDate"],
-                BudgetLabel = (string)reader["BudgetLabel"],
-                Communication = reader["Communication"] is DBNull ? null : (string?)reader["Communication"],
-                BudgetPeriode = (int)reader["BudgetPeriode"],
-                TotalAmount = (double)reader["TotalAmount"],
-                Number =(string)reader["Number"],
-                ReceiverName = (string)reader["Number"]
+                T_Id = (int)reader["T_Id"],
+                T_TotalAmount = (double)reader["T_TotalAmount"],
+                T_ExecutionDate = (DateTime)reader["T_ExecutionDate"],
+                T_CreatedAt = (DateTime)reader["T_CreatedAt"],
+                T_UpdateAt = reader["T_UpdateAt"] is DBNull ? null : (DateTime)reader["T_UpdateAt"],
+                T_IsActive = (bool)reader["T_IsActive"],
+                T_BudgetId = (int)reader["T_BudgetId"],
+                T_AccountDebitId = (int)reader["T_AccountDebitId"],
+                T_AccountCreditId = (int)reader["T_AccountCreditId"],
+                A_Id = (int)reader["A_Id"],
+                A_Number = (string)reader["A_Number"],
+                A_ReceiverName = (string)reader["A_ReceiverName"],
+                A_AccountType = (string)reader["A_AccountType"],
+                A_Communication = reader["A_Communication"] is DBNull ? null : (string)reader["A_Communication"],
+                A_IsOwner = (bool)reader["A_IsOwner"],
+                A_IsActive = (bool)reader["A_IsActive"],
+                A_UserId = (int)reader["A_UserId"],
+                B_Id = (int)reader["B_Id"],
+                B_Label = (string)reader["B_Label"],
+                B_PeriodByMonth = (int)reader["B_PeriodByMonth"],
+                B_UpdatedAt = reader["B_UpdatedAt"] is DBNull ? null : (DateTime)reader["B_UpdatedAt"],
+                B_CreatedAt = (DateTime)reader["B_CreatedAt"],
+                B_IsActive = (bool)reader["B_IsActive"],
+                B_UserID = (int)reader["B_UserID"],
+                B_C_MaxAmount = (double)reader["B_C_MaxAmount"],
+                C_Label = (string)reader["C_Label"],
+                C_CreatedAt = (DateTime)reader["C_CreatedAt"],
+                C_UpdatedAt = reader["C_UpdatedAt"] is DBNull ? null : (DateTime)reader["C_UpdatedAt"],
+                C_IsActive = (bool)reader["C_IsActive"]
             };
-        }
-
+         }
 
         internal static AccountDal ToAccountDal(this DbDataReader reader)
         {

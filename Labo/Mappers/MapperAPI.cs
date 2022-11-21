@@ -1,15 +1,20 @@
 ﻿using BLL.Models.DTO.Account;
+using BLL.Models.DTO.Budget;
+using BLL.Models.DTO.Category;
 using BLL.Models.DTO.Transaction;
 using BLL.Models.DTO.User;
 using BLL.Models.Forms;
 using BLL.Models.Forms.Account;
-using Labo.Models.DTO.Transaction;
-using Labo.Models.DTO.User;
+using Labo.Models.DTO.AccountAPI;
+using Labo.Models.DTO.BudgetAPI;
+using Labo.Models.DTO.CategoryAPI;
+using Labo.Models.DTO.TransactionAPI;
+using Labo.Models.DTO.UserAPI;
 using Labo.Models.Forms.Account;
 using Labo.Models.Forms.User;
 using System.Data.Common;
 
-namespace Labo.Models.Mappers
+namespace Labo.Mappers
 {
     internal static class MapperAPI
     {
@@ -94,21 +99,7 @@ namespace Labo.Models.Mappers
             };
         }
 
-        internal static AllInfoCreditUser ToGetAllInfoCreditByUserDal(this AllInfoCreditUserBll allInfoCreditByUserDal)
-        {
-            return new AllInfoCreditUser()
-            {
-                FirstName = allInfoCreditByUserDal.FirstName,
-                LastName = allInfoCreditByUserDal.LastName,
-                ExecutionDate = allInfoCreditByUserDal.ExecutionDate,
-                BudgetLabel = allInfoCreditByUserDal.BudgetLabel,
-                Communication = allInfoCreditByUserDal.Communication,
-                BudgetPeriode = allInfoCreditByUserDal.BudgetPeriode,
-                TotalAmount = allInfoCreditByUserDal.TotalAmount,
-                Number = allInfoCreditByUserDal.Number,
-                ReceiverName = allInfoCreditByUserDal.ReceiverName
-            };
-        }
+       
 
         internal static UpdateAccountFormBll ToUpdateAccountFormBll(this UpdateAccountForm account)
         {
@@ -123,6 +114,53 @@ namespace Labo.Models.Mappers
                 UserId = account.UserId,
             };
         }
+
+
+
+        internal static TransactionBudgetAccountsCategory ToTransaction(this TransactionBudgetAccountsCategoryBll transactionBll)
+        {
+            return new TransactionBudgetAccountsCategory()
+            {
+                Id = transactionBll.Id,
+                TotalAmount = transactionBll.TotalAmount,
+                ExecutionDate = transactionBll.ExecutionDate,
+                CreatedAt = transactionBll.CreatedAt,
+                UpdateAt = transactionBll.UpdateAt,
+                IsActive = transactionBll.IsActive,
+                Budget = transactionBll.Budget.ToBudget(),
+                AccountDebit = transactionBll.AccountDebit.ToAccount(),
+                AccountCredit = transactionBll.AccountDebit.ToAccount(),
+                Category = transactionBll.Category.ToCategory()
+            };
+        }
+
+        internal static Category ToCategory(this CategoryBll categoryBll)
+        {
+            return new Category()
+            {
+                Id = categoryBll.Id,
+                MaxAmount = categoryBll.MaxAmount,
+                Label = categoryBll.Label,
+                CreatedAt = categoryBll.CreatedAt,
+                UpdatedAt = categoryBll.UpdatedAt,
+                IsActive = categoryBll.IsActive
+            };
+        }
+
+
+        internal static Budget ToBudget(this BudgetBll budgetBll)
+        {
+            return new Budget()
+            {
+                Id = budgetBll.Id,
+                PediodByMonth = budgetBll.PediodByMonth,
+                Label = budgetBll.Label,
+                UdpateAt = budgetBll.UdpateAt,
+                CreatedAt = budgetBll.CreatedAt,
+                User = budgetBll.User.ToUser()
+            };
+        }
+
     }
 }
 

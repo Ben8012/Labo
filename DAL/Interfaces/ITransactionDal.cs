@@ -9,6 +9,7 @@ namespace DAL.Interfaces
 {
     public interface ITransactionDal
     {
-        IEnumerable<AllInfoCreditUserDal> GetAllInfoCreditByUser(int Id);
+        List<TransactionBudgetAccountsCategoryDal> GetTransactionByAccountDebit(int id);
+        List<TransactionBudgetAccountsCategoryDal> GetTransactionByAccountCredit(int id);
     }
 }

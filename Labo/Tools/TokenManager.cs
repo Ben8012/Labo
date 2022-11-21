@@ -1,7 +1,7 @@
 ﻿using BLL.Models;
 using labo.Tools;
 using Labo.Models;
-using Labo.Models.DTO.User;
+using Labo.Models.DTO.UserAPI;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;

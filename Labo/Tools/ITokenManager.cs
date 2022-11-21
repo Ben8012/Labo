@@ -1,5 +1,5 @@
 ﻿
-using Labo.Models.DTO.User;
+using Labo.Models.DTO.UserAPI;
 
 namespace labo.Tools
 {

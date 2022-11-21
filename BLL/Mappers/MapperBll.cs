@@ -1,10 +1,14 @@
 ﻿using BLL.Models.DTO.Account;
+using BLL.Models.DTO.Budget;
+using BLL.Models.DTO.Category;
 using BLL.Models.DTO.Transaction;
 using BLL.Models.DTO.User;
 using BLL.Models.Forms;
 using BLL.Models.Forms.Account;
 using DAL.Models;
 using DAL.Models.DTO.Account;
+using DAL.Models.DTO.Budget;
+using DAL.Models.DTO.Category;
 using DAL.Models.DTO.Transaction;
 using DAL.Models.Forms;
 using DAL.Models.Forms.Account;
@@ -117,19 +121,47 @@ namespace BLL.Mappers
             };
         }
 
-        internal static AllInfoCreditUserBll ToGetAllInfoCreditByUserDal(this AllInfoCreditUserDal allInfoCreditByUserDal)
+        internal static TransactionBudgetAccountsCategoryBll ToTransactionBll(this TransactionBudgetAccountsCategoryDal transactionDal)
         {
-            return new AllInfoCreditUserBll()
+            return new TransactionBudgetAccountsCategoryBll()
             {
-                FirstName = allInfoCreditByUserDal.FirstName,
-                LastName = allInfoCreditByUserDal.LastName,
-                ExecutionDate = allInfoCreditByUserDal.ExecutionDate,
-                BudgetLabel = allInfoCreditByUserDal.BudgetLabel,
-                Communication = allInfoCreditByUserDal.Communication,
-                BudgetPeriode = allInfoCreditByUserDal.BudgetPeriode,
-                TotalAmount = allInfoCreditByUserDal.TotalAmount,
-                Number = allInfoCreditByUserDal.Number,
-                ReceiverName = allInfoCreditByUserDal.ReceiverName
+                Id = transactionDal.Id,
+                TotalAmount = transactionDal.TotalAmount,
+                ExecutionDate = transactionDal.ExecutionDate,
+                CreatedAt = transactionDal.CreatedAt,
+                UpdateAt = transactionDal.UpdateAt,
+                IsActive = transactionDal.IsActive,
+                Budget = transactionDal.Budget.ToBudgetBll(),
+                AccountDebit = transactionDal.AccountDebit.ToAccountBll(),
+                AccountCredit = transactionDal.AccountDebit.ToAccountBll(),
+                Category = transactionDal.Category.ToCategoryBll() 
+             };
+        }
+
+        internal static CategoryBll ToCategoryBll(this CategoryDal categoryDal)
+        {
+            return new CategoryBll()
+            {
+                Id = categoryDal.Id,
+                MaxAmount = categoryDal.MaxAmount, 
+                Label = categoryDal.Label, 
+                CreatedAt = categoryDal.CreatedAt, 
+                UpdatedAt = categoryDal.UpdatedAt, 
+                IsActive = categoryDal.IsActive 
+            };
+        }
+
+
+        internal static BudgetBll ToBudgetBll(this BudgetDal budgetDal)
+        {
+            return new BudgetBll()
+            {
+                Id = budgetDal.Id,
+                PediodByMonth = budgetDal.PediodByMonth,
+                Label = budgetDal.Label, 
+                UdpateAt = budgetDal.UdpateAt, 
+                CreatedAt = budgetDal.CreatedAt,
+                User = budgetDal.User.ToUserBll() 
             };
         }
 

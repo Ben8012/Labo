@@ -1,6 +1,6 @@
-﻿using Labo.Models.DTO.User;
+﻿using Labo.Models.DTO.UserAPI;
 
-namespace Labo.Models
+namespace Labo.Models.DTO.AccountAPI
 {
     public class Account
     {
@@ -11,5 +11,7 @@ namespace Labo.Models
         public string? Communication { get; set; }
         public bool IsOwner { get; set; }
         public User User { get; set; }
+
+      
     }
 }

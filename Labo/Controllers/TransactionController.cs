@@ -1,7 +1,7 @@
 ﻿using BLL.Interfaces;
 using Labo.Models;
 using Labo.Models.Forms;
-using Labo.Models.Mappers;
+using Labo.Mappers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Tools;
@@ -22,12 +22,12 @@ namespace Labo.Controllers
             _logger = logger;
         }
 
-        [HttpGet("GetAllInfoCreditByUser")]
-        public IActionResult GetAllInfoCreditByUser(int Id)
+        [HttpGet("GetTransactionByAccountDebit/{id}")]
+        public IActionResult GetAllTransactionByAccountDebit(int id)
         {
             try
             {
-                return Ok(_transactionBll.GetAllInfoCreditByUser(Id).Select(a => a.ToGetAllInfoCreditByUserDal()));
+                return Ok(_transactionBll.GetTransactionByAccountDebit(id).Select(t=>t.ToTransaction()));
             }
             catch (Exception ex)
             {
@@ -35,6 +35,20 @@ namespace Labo.Controllers
             }
         }
 
-            
+
+        [HttpGet("GetTransactionByAccountCredit/{id}")]
+        public IActionResult GetTransactionByAccountCredit(int id)
+        {
+            try
+            {
+                return Ok(_transactionBll.GetTransactionByAccountCredit(id).Select(t => t.ToTransaction()));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = "l'operation a echoué, contactez l'admin", ErrorMessage = ex.Message });
+            }
         }
+
+
+    }
 }

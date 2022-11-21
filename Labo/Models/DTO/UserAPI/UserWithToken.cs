@@ -1,4 +1,5 @@
-﻿namespace Labo.Models.DTO.User
+﻿namespace Labo.Models.DTO.UserAPI
+
 {
     public class UserWithToken
     {
