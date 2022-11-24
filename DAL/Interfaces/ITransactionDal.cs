@@ -1,4 +1,5 @@
 ﻿using DAL.Models.DTO.Transaction;
+using DAL.Models.Forms.Transaction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,13 @@ namespace DAL.Interfaces
 {
     public interface ITransactionDal
     {
-        List<TransactionBudgetAccountsCategoryDal> GetTransactionByAccountDebit(int id);
-        List<TransactionBudgetAccountsCategoryDal> GetTransactionByAccountCredit(int id);
+        TransactionDal? GetById(int id);
+        IEnumerable<TransactionDal> GetByAccountDebitId(int id);
+        IEnumerable<TransactionDal> GetByAccountCreditId(int id);
+        TransactionDal? Insert(AddTransactionFormDal form);
+        TransactionDal? Update(UpdateTransactionFormDal form);
+        int? Delete(int id);
+
+
     }
 }

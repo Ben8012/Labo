@@ -32,6 +32,14 @@ builder.Services.AddScoped<IAccountBll, AccountBllService>();
 builder.Services.AddScoped<ITransactionDal, TransactionDalService>();
 builder.Services.AddScoped<ITransactionBll, TransactionBllService>();
 
+//injection budget
+builder.Services.AddScoped<IBudgetDal, BudgetDalService>();
+builder.Services.AddScoped<IBudgetBll, BudgetBllService>();
+
+//injection category
+builder.Services.AddScoped<ICategoryDal, CategoryDalService>();
+builder.Services.AddScoped<ICategoryBll, CategoryBllService>();
+
 string connectionString = builder.Configuration.GetConnectionString("Labo");
 // service de connection a la base de donnée
 builder.Services.AddTransient<Connection>(sp => new Connection(SqlClientFactory.Instance, connectionString));// addTransient == une instance par demande

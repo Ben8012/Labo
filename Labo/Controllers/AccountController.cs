@@ -43,7 +43,7 @@ namespace Labo.Controllers
             }
         }
 
-        [HttpPost("Desactivate")]
+        [HttpPatch("Desactivate")]
         public IActionResult Desactivate(int id)
         {
             try
@@ -57,7 +57,7 @@ namespace Labo.Controllers
         }
 
 
-        [HttpPost("Reactivate")]
+        [HttpPatch("Reactivate")]
         public IActionResult Reactivate(int id)
         {
             try
@@ -70,7 +70,7 @@ namespace Labo.Controllers
             }
         }
 
-        [HttpPost("Delete/{id}")]
+        [HttpDelete("Delete/{id}")]
         public IActionResult Delete(int id)
         {
             try

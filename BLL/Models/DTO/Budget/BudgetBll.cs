@@ -12,9 +12,9 @@ namespace BLL.Models.DTO.Budget
         public int Id { get; set; }
         public int PediodByMonth { get; set; }
         public string Label { get; set; }
-        public DateTime? UdpateAt { get; set; }
+        public DateTime? UdpatedAt { get; set; }
         public DateTime CreatedAt { get; set; }
-
-        public UserBll User { get; set; }
+        public int UserId { get; set; }
+        public bool IsActive { get; set; }
     }
 }

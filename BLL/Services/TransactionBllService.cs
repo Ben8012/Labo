@@ -1,6 +1,7 @@
 ﻿using BLL.Interfaces;
 using BLL.Mappers;
 using BLL.Models.DTO.Transaction;
+using BLL.Models.Forms.Transaction;
 using DAL.Interfaces;
 using Microsoft.Extensions.Logging;
 using System;
@@ -22,15 +23,34 @@ namespace BLL.Services
             _logger = logger;
         }
 
-        public IEnumerable<TransactionBudgetAccountsCategoryBll> GetTransactionByAccountCredit(int id)
+        public int? Delete(int id)
         {
-            return _transactionDal.GetTransactionByAccountCredit(id).Select(t => t.ToTransactionBll());
+            return _transactionDal.Delete(id);
         }
 
-        public IEnumerable<TransactionBudgetAccountsCategoryBll> GetTransactionByAccountDebit(int id)
+        public IEnumerable<TransactionBll> GetByAccountCreditId(int id)
         {
-            return _transactionDal.GetTransactionByAccountDebit(id).Select(t => t.ToTransactionBll());
-            
+            return _transactionDal.GetByAccountCreditId(id).Select(t => t.ToTransactionBll());
+        }
+
+        public IEnumerable<TransactionBll> GetByAccountDebitId(int id)
+        {
+            return _transactionDal.GetByAccountDebitId(id).Select(t => t.ToTransactionBll());
+        }
+
+        public TransactionBll GetById(int id)
+        {
+            return _transactionDal.GetById(id).ToTransactionBll();
+        }
+
+        public TransactionBll Insert(AddTransactionFormBll form)
+        {
+            return _transactionDal?.Insert(form.ToAddTransactionFromDal()).ToTransactionBll();
+        }
+
+        public TransactionBll Update(UpdateTransactionFormBll form)
+        {
+            return _transactionDal.Update(form.ToUpdateTransactionFromDal()).ToTransactionBll();
         }
     }
 }

@@ -5,12 +5,18 @@ using BLL.Models.DTO.Transaction;
 using BLL.Models.DTO.User;
 using BLL.Models.Forms;
 using BLL.Models.Forms.Account;
+using BLL.Models.Forms.Budget;
+using BLL.Models.Forms.Category;
+using BLL.Models.Forms.Transaction;
 using Labo.Models.DTO.AccountAPI;
 using Labo.Models.DTO.BudgetAPI;
 using Labo.Models.DTO.CategoryAPI;
 using Labo.Models.DTO.TransactionAPI;
 using Labo.Models.DTO.UserAPI;
 using Labo.Models.Forms.Account;
+using Labo.Models.Forms.Budget;
+using Labo.Models.Forms.Category;
+using Labo.Models.Forms.Transaction;
 using Labo.Models.Forms.User;
 using System.Data.Common;
 
@@ -117,9 +123,9 @@ namespace Labo.Mappers
 
 
 
-        internal static TransactionBudgetAccountsCategory ToTransaction(this TransactionBudgetAccountsCategoryBll transactionBll)
+        internal static Transaction ToTransaction(this TransactionBll transactionBll)
         {
-            return new TransactionBudgetAccountsCategory()
+            return new Transaction()
             {
                 Id = transactionBll.Id,
                 TotalAmount = transactionBll.TotalAmount,
@@ -127,12 +133,41 @@ namespace Labo.Mappers
                 CreatedAt = transactionBll.CreatedAt,
                 UpdateAt = transactionBll.UpdateAt,
                 IsActive = transactionBll.IsActive,
-                Budget = transactionBll.Budget.ToBudget(),
-                AccountDebit = transactionBll.AccountDebit.ToAccount(),
-                AccountCredit = transactionBll.AccountDebit.ToAccount(),
-                Category = transactionBll.Category.ToCategory()
+                BudgetId = transactionBll.BudgetId,
+                AccountDebitId = transactionBll.AccountDebitId,
+                AccountCreditId = transactionBll.AccountCreditId,
+                Communication = transactionBll.Communication
+
             };
         }
+
+        internal static AddTransactionFormBll ToAddTransactionFromBll(this AddTransactionForm addTransactionFrom)
+        {
+            return new AddTransactionFormBll()
+            {
+                TotalAmount = addTransactionFrom.TotalAmount,
+                ExecutionDate = addTransactionFrom.ExecutionDate,
+                BudgetId = addTransactionFrom.BudgetId,
+                AccountDebitId = addTransactionFrom.BudgetId,
+                AccountCreditId = addTransactionFrom.AccountCreditId,
+                Communication = addTransactionFrom.Communication
+            };
+        }
+
+        internal static UpdateTransactionFormBll ToUpdateTransactionFromBll(this UpdateTransactionForm updateTransactionFrom)
+        {
+            return new UpdateTransactionFormBll()
+            {
+                Id = updateTransactionFrom.Id,
+                TotalAmount = updateTransactionFrom.TotalAmount,
+                ExecutionDate = updateTransactionFrom.ExecutionDate,
+                BudgetId = updateTransactionFrom.BudgetId,
+                AccountDebitId = updateTransactionFrom.BudgetId,
+                AccountCreditId = updateTransactionFrom.AccountCreditId,
+                Communication = updateTransactionFrom.Communication
+            };
+        }
+
 
         internal static Category ToCategory(this CategoryBll categoryBll)
         {
@@ -148,6 +183,25 @@ namespace Labo.Mappers
         }
 
 
+        internal static AddCategoryFormBll ToAddCategoryFromBll(this AddCategoryForm addCategoryFrom)
+        {
+            return new AddCategoryFormBll()
+            {
+                Label = addCategoryFrom.Label,
+               
+            };
+        }
+
+        internal static UpdateCategoryFormBll ToUpdateCategoryFromBll(this UpdateCategoryForm updateCategoryFrom)
+        {
+            return new UpdateCategoryFormBll()
+            {
+                Id = updateCategoryFrom.Id,
+                Label = updateCategoryFrom.Label,
+            };
+        }
+
+
         internal static Budget ToBudget(this BudgetBll budgetBll)
         {
             return new Budget()
@@ -155,9 +209,30 @@ namespace Labo.Mappers
                 Id = budgetBll.Id,
                 PediodByMonth = budgetBll.PediodByMonth,
                 Label = budgetBll.Label,
-                UdpateAt = budgetBll.UdpateAt,
+                UdpatedAt = budgetBll.UdpatedAt,
                 CreatedAt = budgetBll.CreatedAt,
-                User = budgetBll.User.ToUser()
+                UserId = budgetBll.UserId
+            };
+        }
+
+        internal static AddBudgetFormBll ToAddBudgetFromBll(this AddBudgetForm addBudgetFrom)
+        {
+            return new AddBudgetFormBll()
+            {
+                PediodByMonth = addBudgetFrom.PediodByMonth,
+                Label = addBudgetFrom.Label,
+                UserId = addBudgetFrom.UserId
+            };
+        }
+
+        internal static UpdateBudgetFormBll ToUpdateBudgetFromBll(this UpdateBudgetForm updateBudgetFrom)
+        {
+            return new UpdateBudgetFormBll()
+            {
+                Id = updateBudgetFrom.Id,
+                PediodByMonth = updateBudgetFrom.PediodByMonth,
+                Label = updateBudgetFrom.Label,
+                UserId = updateBudgetFrom.UserId
             };
         }
 

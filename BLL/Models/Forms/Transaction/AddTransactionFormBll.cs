@@ -1,13 +1,15 @@
-﻿namespace Labo.Models.DTO.TransactionAPI
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BLL.Models.Forms.Transaction
 {
-    public class Transaction
+    public class AddTransactionFormBll
     {
-        public int Id { get; set; }
         public double TotalAmount { get; set; }
         public DateTime ExecutionDate { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime? UpdateAt { get; set; }
-        public bool IsActive { get; set; }
         public int BudgetId { get; set; }
         public int AccountDebitId { get; set; }
         public int AccountCreditId { get; set; }

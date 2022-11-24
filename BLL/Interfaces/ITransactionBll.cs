@@ -1,4 +1,5 @@
 ﻿using BLL.Models.DTO.Transaction;
+using BLL.Models.Forms.Transaction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,12 @@ namespace BLL.Interfaces
 {
     public interface ITransactionBll
     {
-        IEnumerable<TransactionBudgetAccountsCategoryBll> GetTransactionByAccountDebit(int id);
-        IEnumerable<TransactionBudgetAccountsCategoryBll> GetTransactionByAccountCredit(int id);
+        TransactionBll? GetById(int id);
+        IEnumerable<TransactionBll> GetByAccountDebitId(int id);
+        IEnumerable<TransactionBll> GetByAccountCreditId(int id);
+        TransactionBll? Insert(AddTransactionFormBll form);
+        TransactionBll? Update(UpdateTransactionFormBll form);
+        int? Delete(int id);
+
     }
 }

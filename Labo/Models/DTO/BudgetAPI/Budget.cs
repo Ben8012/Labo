@@ -10,9 +10,9 @@ namespace Labo.Models.DTO.BudgetAPI
         public int Id { get; set; }
         public int PediodByMonth { get; set; }
         public string Label { get; set; }
-        public DateTime? UdpateAt { get; set; }
+        public DateTime? UdpatedAt { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        public User User { get; set; }
+        public int UserId { get; set; }
     }
 }

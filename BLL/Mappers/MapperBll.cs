@@ -5,6 +5,9 @@ using BLL.Models.DTO.Transaction;
 using BLL.Models.DTO.User;
 using BLL.Models.Forms;
 using BLL.Models.Forms.Account;
+using BLL.Models.Forms.Budget;
+using BLL.Models.Forms.Category;
+using BLL.Models.Forms.Transaction;
 using DAL.Models;
 using DAL.Models.DTO.Account;
 using DAL.Models.DTO.Budget;
@@ -12,6 +15,9 @@ using DAL.Models.DTO.Category;
 using DAL.Models.DTO.Transaction;
 using DAL.Models.Forms;
 using DAL.Models.Forms.Account;
+using DAL.Models.Forms.Budget;
+using DAL.Models.Forms.Category;
+using DAL.Models.Forms.Transaction;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -121,9 +127,9 @@ namespace BLL.Mappers
             };
         }
 
-        internal static TransactionBudgetAccountsCategoryBll ToTransactionBll(this TransactionBudgetAccountsCategoryDal transactionDal)
+        internal static TransactionBll ToTransactionBll(this TransactionDal transactionDal)
         {
-            return new TransactionBudgetAccountsCategoryBll()
+            return new TransactionBll()
             {
                 Id = transactionDal.Id,
                 TotalAmount = transactionDal.TotalAmount,
@@ -131,25 +137,73 @@ namespace BLL.Mappers
                 CreatedAt = transactionDal.CreatedAt,
                 UpdateAt = transactionDal.UpdateAt,
                 IsActive = transactionDal.IsActive,
-                Budget = transactionDal.Budget.ToBudgetBll(),
-                AccountDebit = transactionDal.AccountDebit.ToAccountBll(),
-                AccountCredit = transactionDal.AccountDebit.ToAccountBll(),
-                Category = transactionDal.Category.ToCategoryBll() 
-             };
+                BudgetId = transactionDal.BudgetId,
+                AccountDebitId = transactionDal.AccountDebitId,
+                AccountCreditId = transactionDal.AccountCreditId,
+                Communication = transactionDal.Communication
+
+            };
         }
+
+        internal static AddTransactionFormDal ToAddTransactionFromDal(this AddTransactionFormBll addTransactionFromBll)
+        {
+            return new AddTransactionFormDal()
+            {
+                TotalAmount  = addTransactionFromBll.TotalAmount,
+                ExecutionDate = addTransactionFromBll.ExecutionDate,
+                BudgetId = addTransactionFromBll.BudgetId,
+                AccountDebitId = addTransactionFromBll.BudgetId,
+                AccountCreditId = addTransactionFromBll.AccountCreditId, 
+                Communication = addTransactionFromBll.Communication  
+            };
+        }
+
+        internal static UpdateTransactionFormDal ToUpdateTransactionFromDal(this UpdateTransactionFormBll updateTransactionFromBll)
+        {
+            return new UpdateTransactionFormDal()
+            {
+                Id = updateTransactionFromBll.Id,
+                TotalAmount = updateTransactionFromBll.TotalAmount,
+                ExecutionDate = updateTransactionFromBll.ExecutionDate,
+                BudgetId = updateTransactionFromBll.BudgetId,
+                AccountDebitId = updateTransactionFromBll.BudgetId,
+                AccountCreditId = updateTransactionFromBll.AccountCreditId,
+                Communication = updateTransactionFromBll.Communication
+            };
+        }
+
+
 
         internal static CategoryBll ToCategoryBll(this CategoryDal categoryDal)
         {
             return new CategoryBll()
             {
                 Id = categoryDal.Id,
-                MaxAmount = categoryDal.MaxAmount, 
                 Label = categoryDal.Label, 
                 CreatedAt = categoryDal.CreatedAt, 
                 UpdatedAt = categoryDal.UpdatedAt, 
                 IsActive = categoryDal.IsActive 
             };
         }
+
+
+        internal static AddCategoryFormDal ToAddCategoryFromDal(this AddCategoryFormBll addCategoryFromBll)
+        {
+            return new AddCategoryFormDal()
+            {
+                Label = addCategoryFromBll.Label,
+            };
+        }
+
+        internal static UpdateCategoryFormDal ToUpdateCategoryFromDal(this UpdateCategoryFormBll updateCategoryFromBll)
+        {
+            return new UpdateCategoryFormDal()
+            {
+                Id = updateCategoryFromBll.Id,
+                Label = updateCategoryFromBll.Label,
+            };
+        }
+
 
 
         internal static BudgetBll ToBudgetBll(this BudgetDal budgetDal)
@@ -159,9 +213,30 @@ namespace BLL.Mappers
                 Id = budgetDal.Id,
                 PediodByMonth = budgetDal.PediodByMonth,
                 Label = budgetDal.Label, 
-                UdpateAt = budgetDal.UdpateAt, 
+                UdpatedAt = budgetDal.UdpatedAt, 
                 CreatedAt = budgetDal.CreatedAt,
-                User = budgetDal.User.ToUserBll() 
+                UserId = budgetDal.UserId 
+            };
+        }
+
+        internal static AddBudgetFormDal ToAddBudgetFromDal(this AddBudgetFormBll addBudgetFromBll)
+        {
+            return new AddBudgetFormDal()
+            {
+                PediodByMonth = addBudgetFromBll.PediodByMonth,
+                Label = addBudgetFromBll.Label,
+                UserId = addBudgetFromBll.UserId
+            };
+        }
+
+        internal static UpdateBudgetFormDal ToUpdateBudgetFromDal(this UpdateBudgetFormBll updateBudgetFromBll)
+        {
+            return new UpdateBudgetFormDal()
+            {
+                Id = updateBudgetFromBll.Id,
+                PediodByMonth = updateBudgetFromBll.PediodByMonth,
+                Label = updateBudgetFromBll.Label,
+                UserId = updateBudgetFromBll.UserId
             };
         }
 

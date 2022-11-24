@@ -1,35 +1,28 @@
 ﻿using BLL.Interfaces;
-using Labo.Models;
-using Labo.Models.Forms;
 using Labo.Mappers;
+using Labo.Models.Forms.Category;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Tools;
-using Labo.Models.Forms.Transaction;
 
 namespace Labo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TransactionController : ControllerBase
+    public class CategoryController : ControllerBase
     {
+        private readonly ICategoryBll _categoryBll;
 
-        private readonly ITransactionBll _transactionBll;
-        private readonly ILogger _logger;
-
-        public TransactionController(ILogger<TransactionController> logger, ITransactionBll transactionBll)
+        public CategoryController(ICategoryBll categoryBll)
         {
-            _transactionBll = transactionBll;
-            _logger = logger;
+            _categoryBll = categoryBll;
         }
 
-     
-        [HttpGet("GetById/{id}")]
+        [HttpGet("GetById")]
         public IActionResult GetById(int id)
         {
             try
             {
-                return Ok(_transactionBll.GetById(id).ToTransaction());
+                return Ok(_categoryBll.GetById(id).ToCategory());
             }
             catch (Exception ex)
             {
@@ -38,12 +31,12 @@ namespace Labo.Controllers
         }
 
 
-        [HttpGet("GetByAccountDebitId/{id}")]
-        public IActionResult GetByAccountDebitId(int id)
+        [HttpGet("GetAll")]
+        public IActionResult GetAll()
         {
             try
             {
-                return Ok(_transactionBll.GetByAccountDebitId(id).Select(t => t.ToTransaction()));
+                return Ok(_categoryBll.GetAll().Select(c => c.ToCategory()));
             }
             catch (Exception ex)
             {
@@ -51,25 +44,53 @@ namespace Labo.Controllers
             }
         }
 
-        [HttpGet("GetByAccountCreditId/{id}")]
-        public IActionResult GetByAccountCreditId(int id)
+
+        [HttpDelete("Delete")]
+        public IActionResult Delete(int id)
         {
             try
             {
-                return Ok(_transactionBll.GetByAccountCreditId(id).Select(t => t.ToTransaction()));
+                return Ok(_categoryBll.Delete(id));
             }
             catch (Exception ex)
             {
                 return BadRequest(new { Message = "l'operation a echoué, contactez l'admin", ErrorMessage = ex.Message });
             }
         }
+
+        [HttpPatch("Desactivate")]
+        public IActionResult Desactivate(int id)
+        {
+            try
+            {
+                return Ok(_categoryBll.Desactivate(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = "l'operation a echoué, contactez l'admin", ErrorMessage = ex.Message });
+            }
+        }
+
+        [HttpPatch("Reactivate")]
+        public IActionResult Reactivate(int id)
+        {
+            try
+            {
+                return Ok(_categoryBll.Reactivate(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = "l'operation a echoué, contactez l'admin", ErrorMessage = ex.Message });
+            }
+        }
+
 
         [HttpPost("Insert")]
-        public IActionResult Insert(AddTransactionForm form)
+        public IActionResult Insert(AddCategoryForm addForm)
         {
             try
             {
-                return Ok(_transactionBll?.Insert(form.ToAddTransactionFromBll()).ToTransaction());
+                return Ok(_categoryBll.Insert(addForm.ToAddCategoryFromBll()).ToCategory());
             }
             catch (Exception ex)
             {
@@ -78,30 +99,16 @@ namespace Labo.Controllers
         }
 
         [HttpPut("Update")]
-        public IActionResult Update(UpdateTransactionForm form)
+        public IActionResult Update(UpdateCategoryForm updateCategoryForm)
         {
             try
             {
-                return Ok(_transactionBll?.Update(form.ToUpdateTransactionFromBll()).ToTransaction());
+                return Ok(_categoryBll.Update(updateCategoryForm.ToUpdateCategoryFromBll()).ToCategory());
             }
             catch (Exception ex)
             {
                 return BadRequest(new { Message = "l'operation a echoué, contactez l'admin", ErrorMessage = ex.Message });
             }
         }
-
-        [HttpDelete]
-        public IActionResult Delete(int id)
-        {
-            try
-            {
-                return Ok(_transactionBll.Delete(id));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { Message = "l'operation a echoué, contactez l'admin", ErrorMessage = ex.Message });
-            }
-        }
-
     }
 }

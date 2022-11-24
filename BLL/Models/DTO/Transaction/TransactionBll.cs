@@ -1,15 +1,15 @@
-﻿using DAL.Models.DTO.Account;
-using DAL.Models.DTO.Budget;
-using DAL.Models.DTO.Category;
+﻿using BLL.Models.DTO.Account;
+using BLL.Models.DTO.Budget;
+using BLL.Models.DTO.Category;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.Models.DTO.Transaction
+namespace BLL.Models.DTO.Transaction
 {
-    public class TransactionBudgetAccountsCategoryDal
+    public class TransactionBll
     {
         public int Id { get; set; }
         public double TotalAmount { get; set; }
@@ -17,12 +17,9 @@ namespace DAL.Models.DTO.Transaction
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdateAt { get; set; }
         public bool IsActive { get; set; }
-        public BudgetDal Budget { get; set; }
-
-        public AccountDal AccountDebit { get; set; }
-        public AccountDal AccountCredit { get; set; }
-
-        public CategoryDal Category { get; set; }
-
+        public int BudgetId { get; set; }
+        public int AccountDebitId { get; set; }
+        public int AccountCreditId { get; set; }
+        public string? Communication { get; set; }
     }
 }

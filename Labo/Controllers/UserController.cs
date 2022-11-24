@@ -9,12 +9,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Data.Common;
 using Tools;
+using Labo.Interfaces;
 
 namespace Labo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : ControllerBase 
     {
 
         private readonly IUserBll _userBll;

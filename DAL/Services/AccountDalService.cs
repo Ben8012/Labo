@@ -106,6 +106,7 @@ namespace DAL.Services
                         }
                     });
                 }
+                if (accounts == null) throw new Exception(" il n'y pas de compte !");
                 return accountsDal;
             }
             catch (Exception ex)
@@ -176,6 +177,7 @@ namespace DAL.Services
             try
             {
                 AccountUserDal? account = _connection.ExecuteReader(command, dr => dr.ToAccountUserDal()).SingleOrDefault();
+                if (account == null) throw new Exception(" Id invalide !");
                 return new AccountDal()
                 {
                     Id = account.Id,
