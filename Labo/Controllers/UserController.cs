@@ -16,7 +16,7 @@ namespace Labo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    
+    [Authorize("Auth")]
     public class UserController : ControllerBase 
     {
 
@@ -31,7 +31,7 @@ namespace Labo.Controllers
             _token = token;
         }
 
-        [Authorize("Auth")]
+        
         [HttpGet("GetAll")]
         public IActionResult GetAll()
         {
@@ -111,6 +111,8 @@ namespace Labo.Controllers
         [HttpPost("Login")]
         public IActionResult Login(LoginForm form)
         {
+            form.Email = "benjamin@mail.com";
+            form.Password = "Test1234=";
             if (!ModelState.IsValid) return BadRequest(new { Message = "ModelState Login est invalide" });
             try
             {

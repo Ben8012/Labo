@@ -86,11 +86,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     {
         options.TokenValidationParameters = new TokenValidationParameters()
         {
-            ValidateAudience = false,
-            ValidateIssuer = false,
-            //ValidateIssuerSigningKey = true,
-            //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-            //    builder.Configuration.GetSection("TokenInfo").GetSection("secret").Value))
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(TokenManager.secret)),
+            ValidateIssuer = true,
+            ValidIssuer = TokenManager.myIssuer,
+            ValidateAudience = true,
+            ValidAudience = TokenManager.myAudience
         };
     });
 
