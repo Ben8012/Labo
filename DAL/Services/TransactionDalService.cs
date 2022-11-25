@@ -20,11 +20,15 @@ namespace DAL.Services
     {
         private readonly Connection _connection;
         private readonly ILogger _logger;
+        private readonly MyTools _myTools;
+
+
 
         public TransactionDalService(ILogger<TransactionDalService> logger, Connection connection)
         {
             _connection = connection;
             _logger = logger;
+            _myTools = new MyTools(connection);
         }
 
 
@@ -51,7 +55,7 @@ namespace DAL.Services
             try
             {
                 IEnumerable<TransactionDal> transactions =_connection.ExecuteReader(cmd, t => t.ToTransactionDal());
-                if (transactions == null) throw new Exception("Id invalide");
+                if (transactions.Count() == 0) throw new Exception("Id invalide");
                 return transactions;
             }
             catch (Exception ex)
@@ -67,7 +71,7 @@ namespace DAL.Services
             try
             {
                 IEnumerable<TransactionDal> transactions = _connection.ExecuteReader(cmd, t => t.ToTransactionDal());
-                if (transactions == null) throw new Exception("Id invalide");
+                if (transactions.Count() == 0) throw new Exception("Id invalide");
                 return transactions;
             }
             catch (Exception ex)
@@ -79,6 +83,15 @@ namespace DAL.Services
 
         public TransactionDal? Insert(AddTransactionFormDal form)
         {
+            bool isBugdetIdOk = _myTools.IsForeignKeyValid("Budget", form.BudgetId);
+            if (!isBugdetIdOk) throw new Exception("clée etrangere budgetId invalide");
+
+            bool isAccountDebitIdOk = _myTools.IsForeignKeyValid("Account", form.AccountDebitId);
+            if (!isAccountDebitIdOk) throw new Exception("clée etrangere AccountDebitId invalide");
+
+            bool isAccountCreditIdOk = _myTools.IsForeignKeyValid("Account", form.AccountCreditId);
+            if (!isAccountCreditIdOk) throw new Exception("clée etrangere AccountCreditId invalide");
+
             Command command = new Command("INSERT INTO [Transaction]( TotalAmount, ExecutionDate, CreatedAt, IsActive, BudgetId, AccountDebitId, AccountCreditId ,Communication ) OUTPUT inserted.id VALUES (@TotalAmount, @ExecutionDate, GETDATE() , 1 , @BudgetId , @AccountDebitId, @AccountCreditId , @Communication)  ", false);
             command.AddParameter("TotalAmount", form.TotalAmount);
             command.AddParameter("ExecutionDate", form.ExecutionDate);
@@ -112,6 +125,17 @@ namespace DAL.Services
 
         public TransactionDal? Update(UpdateTransactionFormDal form)
         {
+           
+
+            bool isBugdetIdOk = _myTools.IsForeignKeyValid("Budget", form.BudgetId);
+            if (!isBugdetIdOk) throw new Exception("clée etrangere budgetId invalide");
+
+            bool isAccountDebitIdOk = _myTools.IsForeignKeyValid("Account", form.AccountDebitId);
+            if (!isAccountDebitIdOk) throw new Exception("clée etrangere AccountDebitId invalide");
+
+            bool isAccountCreditIdOk = _myTools.IsForeignKeyValid("Account", form.AccountCreditId);
+            if (!isAccountCreditIdOk) throw new Exception("clée etrangere AccountCreditId invalide");
+
             Command command = new Command("UPDATE [Transaction] SET TotalAmount = @TotalAmount, ExecutionDate = @ExecutionDate, BudgetId =@BudgetId, AccountDebitId = @AccountDebitId, AccountCreditId = @AccountCreditId, Communication = @Communication , UpdatedAt = GETDATE() OUTPUT inserted.id WHERE Id =@Id", false);
             command.AddParameter("Id", form.Id);
             command.AddParameter("TotalAmount", form.TotalAmount);
@@ -155,6 +179,43 @@ namespace DAL.Services
             }
         }
 
+        public int Desactivate(int id)
+        {
+            Command command = new Command("UPDATE [Transaction] SET IsActive = 0 WHERE @Id= Id", false);
+            command.AddParameter("id", id);
+
+            int nbligne;
+            try
+            {
+                nbligne = _connection.ExecuteNonQuery(command);
+                if (nbligne != 1) return -1;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return nbligne;
+        }
+
+        public int Reactivate(int id)
+        {
+            Command command = new Command("UPDATE [Transaction] SET IsActive = 1 WHERE @Id= Id", false);
+            command.AddParameter("id", id);
+
+            int nbligne;
+            try
+            {
+                nbligne = _connection.ExecuteNonQuery(command);
+                if (nbligne != 1) return -1;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return nbligne;
+        }
+
+       
 
     }
 }

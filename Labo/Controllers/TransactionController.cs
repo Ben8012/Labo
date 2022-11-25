@@ -64,6 +64,33 @@ namespace Labo.Controllers
             }
         }
 
+
+        [HttpPatch("Desactivate")]
+        public IActionResult Desactivate(int id)
+        {
+            try
+            {
+                return Ok(_transactionBll.Desactivate(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = "l'operation a echoué, contactez l'admin", ErrorMessage = ex.Message });
+            }
+        }
+
+        [HttpPatch("Reactivate")]
+        public IActionResult Reactivate(int id)
+        {
+            try
+            {
+                return Ok(_transactionBll.Reactivate(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = "l'operation a echoué, contactez l'admin", ErrorMessage = ex.Message });
+            }
+        }
+
         [HttpPost("Insert")]
         public IActionResult Insert(AddTransactionForm form)
         {

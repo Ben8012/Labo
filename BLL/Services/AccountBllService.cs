@@ -49,5 +49,10 @@ namespace BLL.Services
         {
             return _accountDal.Update(updateAccountFormBll.ToUpdateAccountFormDal()).ToAccountBll();
         }
+
+        public AccountBll GetById(int id)
+        {
+            return _accountDal.GetById(id).ToAccountBll();
+        }
     }
 }

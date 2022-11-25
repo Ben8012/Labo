@@ -17,11 +17,13 @@ namespace DAL.Services
     {
         private readonly Connection _connection;
         private readonly ILogger _logger;
+        private readonly MyTools _myTools;
 
         public AccountDalService(ILogger<AccountDalService> logger, Connection connection)
         {
             _connection = connection;
             _logger = logger;
+            _myTools = new MyTools(connection);
         }
 
         public int Delete(int id)
@@ -32,7 +34,7 @@ namespace DAL.Services
             try
             {
                 nbligne = _connection.ExecuteNonQuery(command);
-                if (nbligne != 0) return -1;
+                if (nbligne != 1) return -1;
                 return nbligne;
             }
             catch (Exception ex)
@@ -79,7 +81,8 @@ namespace DAL.Services
 
         public List<AccountDal> GetAll()
         {
-            Command command = new Command("SELECT Account.Id, Number, AccountType, ReceiverName, Communication, IsOwner, UserId, LastName, FirstName, Email, Birthdate, CreatedAt, UpdatedAt FROM [Account] JOIN [USER] ON [User].Id = [Account].UserId;", false);
+          
+            Command command = new Command("SELECT Account.Id, Number, AccountType, ReceiverName, IsOwner, UserId, LastName, FirstName, Email, Birthdate, CreatedAt, UpdatedAt FROM [Account] JOIN [USER] ON [User].Id = [Account].UserId;", false);
             try
             {
                 IEnumerable <AccountUserDal> accounts = _connection.ExecuteReader(command, dr => dr.ToAccountUserDal());
@@ -92,7 +95,7 @@ namespace DAL.Services
                         Number = account.Number,
                         AccountType = account.AccountType,
                         ReceiverName = account.ReceiverName,
-                        Communication = account.Communication,
+                        //Communication = account.Communication,
                         IsOwner = account.IsOwner,
                         User = new UserDal()
                         {
@@ -118,11 +121,14 @@ namespace DAL.Services
 
         public AccountDal Insert(AddAccountFormDal addAccountFormDal)
         {
-            Command command = new Command("INSERT INTO [Account](Number, AccountType, ReceiverName, Communication, IsOwner, UserId,IsActive ) OUTPUT inserted.id VALUES (@Number, @AccountType, @ReceiverName, @Communication, @IsOwner, @UserId, @IsActive)", false);
+            bool isUserIdOk = _myTools.IsForeignKeyValid("Account", addAccountFormDal.UserId);
+            if (!isUserIdOk) throw new Exception("clée etrangere userId invalide");
+
+            Command command = new Command("INSERT INTO [Account](Number, AccountType, ReceiverName, IsOwner, UserId,IsActive ) OUTPUT inserted.id VALUES (@Number, @AccountType, @ReceiverName, @IsOwner, @UserId, @IsActive)", false);
             command.AddParameter("Number", addAccountFormDal.Number);
             command.AddParameter("AccountType", addAccountFormDal.AccountType);
             command.AddParameter("ReceiverName", addAccountFormDal.ReceiverName);
-            command.AddParameter("Communication", addAccountFormDal.Communication);
+            //command.AddParameter("Communication", addAccountFormDal.Communication);
             command.AddParameter("IsOwner", addAccountFormDal.IsOwner);
             command.AddParameter("UserId", addAccountFormDal.UserId);
             command.AddParameter("IsActive", 1);
@@ -131,7 +137,7 @@ namespace DAL.Services
             {
                 int? id = (int?)_connection.ExecuteScalar(command);
                 if (!id.HasValue) throw new Exception("probleme ! l'insertion dans la db a echoué");
-                AccountDal? newAccount = GetAccountById(id.Value);
+                AccountDal? newAccount = GetById(id.Value);
                 if (newAccount is null) throw new Exception("probleme ! ce compte n'existe pas");
                 return newAccount;
             }
@@ -145,11 +151,14 @@ namespace DAL.Services
 
         public AccountDal Update(UpdateAccountFormDal updateAccountFormDal)
         {
+            bool isUserIdOk = _myTools.IsForeignKeyValid("Account", updateAccountFormDal.UserId);
+            if (!isUserIdOk) throw new Exception("clée etrangere userId invalide");
+
             Command command = new Command("SP_UpdateAccount", true);
             command.AddParameter("Number", updateAccountFormDal.Number);
             command.AddParameter("AccountType", updateAccountFormDal.AccountType);
             command.AddParameter("ReceiverName", updateAccountFormDal.ReceiverName);
-            command.AddParameter("Communication", updateAccountFormDal.Communication);
+            //command.AddParameter("Communication", updateAccountFormDal.Communication);
             command.AddParameter("UserId", updateAccountFormDal.UserId);
             command.AddParameter("Id", updateAccountFormDal.Id);
             command.AddParameter("IsOwner", updateAccountFormDal.IsOwner);
@@ -158,7 +167,7 @@ namespace DAL.Services
             {
                int? resultid = (int?)_connection.ExecuteScalar(command);
                 if (!resultid.HasValue) throw new Exception("probleme de recuperation de l'id lors de la mise a jour");
-                AccountDal? account = GetAccountById(resultid.Value);
+                AccountDal? account = GetById(resultid.Value);
                 if (account is null) throw new Exception("probleme de recuperation de l'utilisateur lors de la mise a jour");
                 return account;
            
@@ -170,9 +179,9 @@ namespace DAL.Services
         }
 
 
-        private AccountDal GetAccountById(int id)
+        public AccountDal GetById(int id)
         {
-            Command command = new Command("SELECT Account.Id, Number, AccountType, ReceiverName, Communication, IsOwner, UserId, LastName, FirstName, Email, Birthdate, CreatedAt, UpdatedAt FROM [Account] JOIN [USER] ON [User].Id = [Account].UserId WHERE Account.Id = @Id; ", false);
+            Command command = new Command("SELECT Account.Id, Number, AccountType, ReceiverName, IsOwner, UserId, LastName, FirstName, Email, Birthdate, CreatedAt, UpdatedAt FROM [Account] JOIN [USER] ON [User].Id = [Account].UserId WHERE Account.Id = @Id; ", false);
             command.AddParameter("Id", id);
             try
             {
@@ -184,7 +193,7 @@ namespace DAL.Services
                     Number = account.Number,
                     AccountType = account.AccountType,
                     ReceiverName = account.ReceiverName,
-                    Communication = account.Communication,
+                    //Communication = account.Communication,
                     IsOwner = account.IsOwner,
                     User = new UserDal()
                     {

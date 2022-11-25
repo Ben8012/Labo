@@ -53,7 +53,7 @@ namespace BLL.Mappers
                Number = accountDal.Number,
                AccountType = accountDal.AccountType,
                ReceiverName = accountDal.ReceiverName,
-               Communication = accountDal.Communication,
+               //Communication = accountDal.Communication,
                IsOwner = accountDal.IsOwner,    
                User = accountDal.User.ToUserBll()
             };
@@ -106,7 +106,7 @@ namespace BLL.Mappers
                 Number = accountBll.Number,
                 AccountType = accountBll.AccountType,
                 ReceiverName = accountBll.ReceiverName,
-                Communication = accountBll.Communication,
+                //Communication = accountBll.Communication,
                 IsOwner = accountBll.IsOwner,
                 UserId = accountBll.UserId,
             };
@@ -121,7 +121,7 @@ namespace BLL.Mappers
                 Number = accountBll.Number,
                 AccountType = accountBll.AccountType,
                 ReceiverName = accountBll.ReceiverName,
-                Communication = accountBll.Communication,
+                //Communication = accountBll.Communication,
                 IsOwner = accountBll.IsOwner,
                 UserId = accountBll.UserId,
             };
@@ -152,7 +152,7 @@ namespace BLL.Mappers
                 TotalAmount  = addTransactionFromBll.TotalAmount,
                 ExecutionDate = addTransactionFromBll.ExecutionDate,
                 BudgetId = addTransactionFromBll.BudgetId,
-                AccountDebitId = addTransactionFromBll.BudgetId,
+                AccountDebitId = addTransactionFromBll.AccountDebitId,
                 AccountCreditId = addTransactionFromBll.AccountCreditId, 
                 Communication = addTransactionFromBll.Communication  
             };
@@ -166,7 +166,7 @@ namespace BLL.Mappers
                 TotalAmount = updateTransactionFromBll.TotalAmount,
                 ExecutionDate = updateTransactionFromBll.ExecutionDate,
                 BudgetId = updateTransactionFromBll.BudgetId,
-                AccountDebitId = updateTransactionFromBll.BudgetId,
+                AccountDebitId = updateTransactionFromBll.AccountDebitId,
                 AccountCreditId = updateTransactionFromBll.AccountCreditId,
                 Communication = updateTransactionFromBll.Communication
             };

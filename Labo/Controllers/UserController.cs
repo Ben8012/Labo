@@ -10,11 +10,13 @@ using Microsoft.AspNetCore.Mvc;
 using System.Data.Common;
 using Tools;
 using Labo.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Labo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    
     public class UserController : ControllerBase 
     {
 
@@ -29,6 +31,7 @@ namespace Labo.Controllers
             _token = token;
         }
 
+        [Authorize("Auth")]
         [HttpGet("GetAll")]
         public IActionResult GetAll()
         {
@@ -56,7 +59,7 @@ namespace Labo.Controllers
         }
 
         
-
+        [AllowAnonymous]
         [HttpPost("Insert")]
         public IActionResult Insert(AddUserForm form)
         {
@@ -104,6 +107,7 @@ namespace Labo.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("Login")]
         public IActionResult Login(LoginForm form)
         {
@@ -128,7 +132,7 @@ namespace Labo.Controllers
                     Token = _token.GenerateJWTUser(user)
                 };
 
-                return Ok(user);
+                return Ok(userWithToken);
             }
             catch (Exception ex)
             {

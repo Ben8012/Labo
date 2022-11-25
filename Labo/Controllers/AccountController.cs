@@ -30,6 +30,19 @@ namespace Labo.Controllers
             }
         }
 
+        [HttpGet("GetById/{id}")]
+        public IActionResult GetById(int id)
+        {
+            try
+            {
+                return Ok(_accountBll.GetById(id).ToAccount());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = "l'operation a echoué, contactez l'admin", ErrorMessage = ex.Message });
+            }
+        }
+
         [HttpPost("Insert")]
         public IActionResult Insert(AddAccountForm addAccountForm)
         {

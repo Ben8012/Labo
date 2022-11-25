@@ -36,7 +36,7 @@ namespace DAL.Mappers
                 Number = (string)reader["Number"],
                 AccountType = (string)reader["AccountType"],
                 ReceiverName = (string)reader["ReceiverName"],
-                Communication = reader["Communication"] is DBNull ? null : (string)reader["Communication"],
+                //Communication = reader["Communication"] is DBNull ? null : (string)reader["Communication"],
                 IsOwner = (bool)reader["IsOwner"],
                 UserId = (int)reader["UserId"] ,
                 FirstName = (string)reader["FirstName"],
@@ -75,7 +75,7 @@ namespace DAL.Mappers
                 Number = (string)reader["Number"],
                 AccountType = (string)reader["AccountType"],
                 ReceiverName = (string)reader["ReceiverName"],
-                Communication = reader["Communication"] is DBNull ? null : (string)reader["Communication"],
+                //Communication = reader["Communication"] is DBNull ? null : (string)reader["Communication"],
                 IsOwner = (bool)reader["IsOwner"],
                
             };

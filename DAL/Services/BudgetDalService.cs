@@ -16,11 +16,12 @@ namespace DAL.Services
     {
         private readonly Connection _connection;
         private readonly ILogger _logger;
-
+        private readonly MyTools _myTools;
         public BudgetDalService(ILogger<BudgetDalService> logger, Connection connection)
         {
             _connection = connection;
             _logger = logger;
+            _myTools = new MyTools(connection);
         }
 
         public int Delete(int id)
@@ -94,6 +95,9 @@ namespace DAL.Services
 
         public BudgetDal Insert(AddBudgetFormDal addForm)
         {
+            bool isUserIdOk = _myTools.IsForeignKeyValid("Budget", addForm.UserId);
+            if (!isUserIdOk) throw new Exception("clée etrangere userId invalide");
+
             Command command = new Command("INSERT INTO [Budget](PeriodByMonth, Label, CreatedAt, UserId, IsActive ) OUTPUT inserted.id VALUES (@PeriodByMonth, @Label, GETDATE(), @UserId, 1)", false);
             command.AddParameter("PeriodByMonth", addForm.PediodByMonth);
             command.AddParameter("Label", addForm.Label);
@@ -116,6 +120,9 @@ namespace DAL.Services
 
         public BudgetDal Update(UpdateBudgetFormDal updateBudgetFormDal)
         {
+            bool isUserIdOk = _myTools.IsForeignKeyValid("Budget", updateBudgetFormDal.UserId);
+            if (!isUserIdOk) throw new Exception("clée etrangere userId invalide");
+
             Command command = new Command("UPDATE [Budget] SET PeriodByMonth = @PeriodByMonth , Label = @Label , UserId = @UserId, UpdatedAt = GETDATE() OUTPUT inserted.id WHERE Id =@Id", false);
             command.AddParameter("PeriodByMonth", updateBudgetFormDal.PediodByMonth);
             command.AddParameter("Label", updateBudgetFormDal.Label);

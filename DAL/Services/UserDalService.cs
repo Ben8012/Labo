@@ -119,7 +119,9 @@ namespace DAL.Services
             command.AddParameter("Id", id);
             try
             {
-                return _connection.ExecuteNonQuery(command); // renvois le nombre de ligne affectés
+                int? nbLigne = (int?)_connection.ExecuteNonQuery(command);
+                if (nbLigne != 1) throw new Exception("erreur lors de la suppression");
+                return nbLigne;
 
             }
             catch (Exception ex)
@@ -154,16 +156,23 @@ namespace DAL.Services
             try
             {
                 passwordHash = (string?)_connection.ExecuteScalar(command);
+                if (passwordHash is null) throw new Exception("l'email est invalide");
             }
             catch (Exception ex)
             {
-                throw new Exception("l'email est invalide", ex);
+                throw ex;
             }
 
-            bool verified = BCrypt.Net.BCrypt.Verify(form.Password, passwordHash);
-            if (!verified)  throw new Exception("Le mot de passe est invailde");
-
-
+            try
+            {
+                bool verified = BCrypt.Net.BCrypt.Verify(form.Password, passwordHash);
+                if (!verified) throw new Exception("Le mot de passe est invalide");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            
             Command command2 = new Command("SELECT Id, LastName, FirstName, Email, Birthdate, CreatedAt, UpdatedAt FROM [User] WHERE Email = @Email", false);
             command2.AddParameter("Email", form.Email);
 

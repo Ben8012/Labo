@@ -16,6 +16,8 @@ namespace DAL.Interfaces
         TransactionDal? Insert(AddTransactionFormDal form);
         TransactionDal? Update(UpdateTransactionFormDal form);
         int? Delete(int id);
+        int Desactivate(int id);
+        int Reactivate(int id);
 
 
     }

@@ -28,6 +28,11 @@ namespace BLL.Services
             return _transactionDal.Delete(id);
         }
 
+        public int Desactivate(int id)
+        {
+            return _transactionDal.Desactivate(id);
+        }
+
         public IEnumerable<TransactionBll> GetByAccountCreditId(int id)
         {
             return _transactionDal.GetByAccountCreditId(id).Select(t => t.ToTransactionBll());
@@ -46,6 +51,11 @@ namespace BLL.Services
         public TransactionBll Insert(AddTransactionFormBll form)
         {
             return _transactionDal?.Insert(form.ToAddTransactionFromDal()).ToTransactionBll();
+        }
+
+        public int Reactivate(int id)
+        {
+            return _transactionDal.Reactivate(id);
         }
 
         public TransactionBll Update(UpdateTransactionFormBll form)

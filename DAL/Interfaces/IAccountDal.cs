@@ -13,6 +13,7 @@ namespace DAL.Interfaces
     {
         // Gérer les comptes :  Dont nous pourrons afficher la liste, créer, éditer et désactiver :
         List<AccountDal> GetAll();
+        AccountDal GetById(int id);
 
         AccountDal Insert(AddAccountFormDal addAccountFormDal);
 

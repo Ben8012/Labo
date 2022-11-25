@@ -47,7 +47,7 @@ namespace Labo.Mappers
                 Number = accountBll.Number,
                 AccountType = accountBll.AccountType,
                 ReceiverName = accountBll.ReceiverName,
-                Communication = accountBll.Communication,
+                //Communication = accountBll.Communication,
                 IsOwner = accountBll.IsOwner,
                 User = accountBll.User.ToUser()
             };
@@ -99,7 +99,7 @@ namespace Labo.Mappers
                 Number = accountForm.Number,
                 AccountType = accountForm.AccountType,
                 ReceiverName = accountForm.ReceiverName,
-                Communication = accountForm.Communication,
+                //Communication = accountForm.Communication,
                 IsOwner = accountForm.IsOwner,
                 UserId = accountForm.UserId,
             };
@@ -115,7 +115,7 @@ namespace Labo.Mappers
                 Number = account.Number,
                 AccountType = account.AccountType,
                 ReceiverName = account.ReceiverName,
-                Communication = account.Communication,
+                //Communication = account.Communication,
                 IsOwner = account.IsOwner,
                 UserId = account.UserId,
             };
@@ -148,7 +148,7 @@ namespace Labo.Mappers
                 TotalAmount = addTransactionFrom.TotalAmount,
                 ExecutionDate = addTransactionFrom.ExecutionDate,
                 BudgetId = addTransactionFrom.BudgetId,
-                AccountDebitId = addTransactionFrom.BudgetId,
+                AccountDebitId = addTransactionFrom.AccountDebitId,
                 AccountCreditId = addTransactionFrom.AccountCreditId,
                 Communication = addTransactionFrom.Communication
             };
@@ -162,7 +162,7 @@ namespace Labo.Mappers
                 TotalAmount = updateTransactionFrom.TotalAmount,
                 ExecutionDate = updateTransactionFrom.ExecutionDate,
                 BudgetId = updateTransactionFrom.BudgetId,
-                AccountDebitId = updateTransactionFrom.BudgetId,
+                AccountDebitId = updateTransactionFrom.AccountDebitId,
                 AccountCreditId = updateTransactionFrom.AccountCreditId,
                 Communication = updateTransactionFrom.Communication
             };

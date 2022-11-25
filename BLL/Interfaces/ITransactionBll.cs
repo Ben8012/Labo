@@ -16,6 +16,8 @@ namespace BLL.Interfaces
         TransactionBll? Insert(AddTransactionFormBll form);
         TransactionBll? Update(UpdateTransactionFormBll form);
         int? Delete(int id);
+        int Desactivate(int id);
+        int Reactivate(int id);
 
     }
 }

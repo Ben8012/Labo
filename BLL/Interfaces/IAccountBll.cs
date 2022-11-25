@@ -11,6 +11,7 @@ namespace BLL.Interfaces
     public interface IAccountBll
     {
         List<AccountBll> GetAll();
+        AccountBll GetById(int id);
 
         AccountBll Insert(AddAccountFormBll addAccountFormBll);
 
