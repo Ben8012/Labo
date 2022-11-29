@@ -136,7 +136,8 @@ namespace Labo.Mappers
                 BudgetId = transactionBll.BudgetId,
                 AccountDebitId = transactionBll.AccountDebitId,
                 AccountCreditId = transactionBll.AccountCreditId,
-                Communication = transactionBll.Communication
+                Communication = transactionBll.Communication,
+                CategoryId = transactionBll.CategoryId
 
             };
         }
@@ -150,7 +151,8 @@ namespace Labo.Mappers
                 BudgetId = addTransactionFrom.BudgetId,
                 AccountDebitId = addTransactionFrom.AccountDebitId,
                 AccountCreditId = addTransactionFrom.AccountCreditId,
-                Communication = addTransactionFrom.Communication
+                Communication = addTransactionFrom.Communication,
+                CategoryId = addTransactionFrom.CategoryId
             };
         }
 
@@ -164,7 +166,8 @@ namespace Labo.Mappers
                 BudgetId = updateTransactionFrom.BudgetId,
                 AccountDebitId = updateTransactionFrom.AccountDebitId,
                 AccountCreditId = updateTransactionFrom.AccountCreditId,
-                Communication = updateTransactionFrom.Communication
+                Communication = updateTransactionFrom.Communication,
+                CategoryId = updateTransactionFrom.CategoryId
             };
         }
 

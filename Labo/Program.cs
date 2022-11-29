@@ -49,12 +49,6 @@ builder.Services.AddTransient<Connection>(sp => new Connection(SqlClientFactory.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    //options.SwaggerDoc("V1", new OpenApiInfo
-    //{
-    //    Version = "V1",
-    //    Title = "WebAPI",
-    //    Description = "Product WebAPI"
-    //});
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Scheme = "Bearer",

@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Tools;
 using Labo.Models.Forms.Transaction;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Labo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize("Auth")]
     public class TransactionController : ControllerBase
     {
 

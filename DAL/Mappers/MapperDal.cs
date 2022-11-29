@@ -62,8 +62,8 @@ namespace DAL.Mappers
                 BudgetId = (int)reader["BudgetId"],
                 AccountDebitId = (int)reader["AccountDebitId"],
                 AccountCreditId = (int)reader["AccountCreditId"],
-                Communication = reader["Communication"] is DBNull ? null : (string)reader["Communication"]
-               
+                Communication = reader["Communication"] is DBNull ? null : (string)reader["Communication"],
+                
             };
          }
 

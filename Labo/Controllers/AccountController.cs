@@ -3,11 +3,13 @@ using Labo.Models.Forms.Account;
 using Labo.Mappers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Labo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize("Auth")]
     public class AccountController : ControllerBase
     {
         private readonly IAccountBll _accountBll;

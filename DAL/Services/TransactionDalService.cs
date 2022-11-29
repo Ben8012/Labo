@@ -100,14 +100,16 @@ namespace DAL.Services
             command.AddParameter("AccountCreditId", form.AccountCreditId);
             command.AddParameter("Communication", form.Communication == "" ? DBNull.Value : form.Communication);
 
+            int? id;
+            TransactionDal? transaction;
             try
             {
-                int? id = (int?)_connection.ExecuteScalar(command); 
+                id = (int?)_connection.ExecuteScalar(command); 
                 if (id.HasValue)
                 {
-                    TransactionDal? transaction = GetById(id.Value);
+                    transaction = GetById(id.Value);
                     if (transaction == null) throw new Exception("Id invalide");
-                    return transaction;
+                  
                 }
                 else
                 {
@@ -118,6 +120,38 @@ namespace DAL.Services
             {
                 throw ex;
             }
+
+            Command cmd2 = new Command("INSERT INTO [Transaction_Category](AmoutDetail, CategoryId, TransactionId) OUTPUT inserted.id VALUES(@AmoutDetail, @CategoryId, @TransactionId)", false);
+            cmd2.AddParameter("AmoutDetail", 0);
+            cmd2.AddParameter("CategoryId", form.CategoryId );
+            cmd2.AddParameter("TransactionId", id);
+
+            int? insterdedId_T_C;
+            try
+            {
+               insterdedId_T_C =  (int?)_connection.ExecuteScalar(cmd2);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            Command cmd3 = new Command("INSERT INTO [Budget_Category](MaxAmount, CategoryId, BudgetId) OUTPUT inserted.id VALUES(@MaxAmount, @CategoryId, @BudgetId)", false);
+            cmd3.AddParameter("MaxAmount", 0);
+            cmd3.AddParameter("CategoryId", form.CategoryId);
+            cmd3.AddParameter("BudgetId", form.BudgetId);
+
+            int? insertedId_B_C;
+            try
+            {
+                insertedId_B_C =(int?)_connection.ExecuteScalar(cmd3);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return transaction;
 
         }
 
@@ -145,38 +179,84 @@ namespace DAL.Services
             command.AddParameter("AccountDebitId", form.AccountDebitId);
             command.AddParameter("Communication", form.Communication == "" ? DBNull.Value : form.Communication);
 
+            TransactionDal? transaction;
             try
             {
                 int? resultid = (int?)_connection.ExecuteScalar(command);
                 if (!resultid.HasValue) throw new Exception("probleme de recuperation de l'id lors de la mise a jour");
-                TransactionDal? transaction = GetById(resultid.Value);
+                transaction = GetById(resultid.Value);
                 if (transaction is null) throw new Exception("probleme de recuperation de l'utilisateur lors de la mise a jour");
-                return transaction;
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
+
+            Command cmd2 = new Command("UPDATE [Transaction_Category] SET AmoutDetail = @AmoutDetail OUTPUT inserted.id WHERE TransactionId = @TransactionId AND CategoryId = @CategoryId", false);
+            cmd2.AddParameter("AmoutDetail", 0);
+            cmd2.AddParameter("CategoryId", form.CategoryId);
+            cmd2.AddParameter("TransactionId",form.Id);
+
+            int insterdedId_T_C;
+            try
+            {
+                insterdedId_T_C = (int)_connection.ExecuteScalar(cmd2);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            Command cmd3 = new Command("UPDATE [Budget_Category] SET MaxAmount = @MaxAmount OUTPUT inserted.id WHERE CategoryId= @CategoryId AND BudgetId = @BudgetId", false);
+            cmd3.AddParameter("MaxAmount", 0);
+            cmd3.AddParameter("CategoryId", form.CategoryId);
+            cmd3.AddParameter("BudgetId", form.BudgetId);
+
+            int insertedId_B_C;
+            try
+            {
+                insertedId_B_C = (int)_connection.ExecuteScalar(cmd3);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return transaction;
+
         }
 
 
         public int? Delete(int id)
         {
-            Command command = new Command("DELETE FROM [Transaction] WHERE Id=@Id", false);
-            command.AddParameter("Id", id);
+            Command cmd2 = new Command("DELETE FROM [Transaction_Category] WHERE TransactionId = @TransactionId", false);
+            cmd2.AddParameter("TransactionId", id);
             try
             {
-                int nbLigne =_connection.ExecuteNonQuery(command);
-                if (nbLigne != 1) throw new Exception("erreur lors de la suppression");
-                return nbLigne;  
+                _connection.ExecuteNonQuery(cmd2);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
 
+            Command command = new Command("DELETE FROM [Transaction] OUTPUT deleted.id WHERE Id=@Id", false);
+            command.AddParameter("Id", id);
+
+            int? deletedId;
+            try
+            {
+                deletedId = (int?)_connection.ExecuteScalar(command);
+                if (!deletedId.HasValue) throw new Exception("erreur lors de la suppression");
+                return deletedId;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
                 throw ex;
             }
+
+          
         }
 
         public int Desactivate(int id)

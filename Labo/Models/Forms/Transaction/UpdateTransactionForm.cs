@@ -16,6 +16,8 @@ namespace Labo.Models.Forms.Transaction
         public int AccountDebitId { get; set; }
         [Required]
         public int AccountCreditId { get; set; }
+        [Required]
+        public int CategoryId { get; set; }
         public string? Communication { get; set; }
     }
 }

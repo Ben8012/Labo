@@ -33,6 +33,19 @@ namespace DAL.Services
             {
                 nbligne = _connection.ExecuteNonQuery(command);
                 if (nbligne != 1) return -1;
+                //return nbligne;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            Command command2 = new Command("DELETE FROM [Budget_Category] WHERE BudgetId = @Id", false);
+            command2.AddParameter("id", id);
+            try
+            {
+                nbligne = _connection.ExecuteNonQuery(command);
+                if (nbligne != 1) return -1;
                 return nbligne;
             }
             catch (Exception ex)
@@ -102,12 +115,12 @@ namespace DAL.Services
             command.AddParameter("PeriodByMonth", addForm.PediodByMonth);
             command.AddParameter("Label", addForm.Label);
             command.AddParameter("UserId", addForm.UserId);
-
+            int? insertedId;
             try
             {
-                int? id = (int?)_connection.ExecuteScalar(command);
-                if (!id.HasValue) throw new Exception("probleme ! l'insertion dans la db a echoué");
-                BudgetDal? budget = GetById(id.Value);
+                insertedId = (int?)_connection.ExecuteScalar(command);
+                if (!insertedId.HasValue) throw new Exception("probleme ! l'insertion dans la db a echoué");
+                BudgetDal? budget = GetById(insertedId.Value);
                 if (budget is null) throw new Exception("probleme ! ce compte n'existe pas");
                 return budget;
             }
@@ -115,6 +128,7 @@ namespace DAL.Services
             {
                 throw ex;
             }
+ 
         }
 
 

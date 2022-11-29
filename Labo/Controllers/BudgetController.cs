@@ -1,6 +1,7 @@
 ﻿using BLL.Interfaces;
 using Labo.Mappers;
 using Labo.Models.Forms.Budget;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +9,7 @@ namespace Labo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize("Auth")]
     public class BudgetController : ControllerBase
     {
         private readonly IBudgetBll _budgetBll;

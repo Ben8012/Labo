@@ -140,7 +140,8 @@ namespace BLL.Mappers
                 BudgetId = transactionDal.BudgetId,
                 AccountDebitId = transactionDal.AccountDebitId,
                 AccountCreditId = transactionDal.AccountCreditId,
-                Communication = transactionDal.Communication
+                Communication = transactionDal.Communication,
+                CategoryId = transactionDal.CategoryId
 
             };
         }
@@ -154,7 +155,8 @@ namespace BLL.Mappers
                 BudgetId = addTransactionFromBll.BudgetId,
                 AccountDebitId = addTransactionFromBll.AccountDebitId,
                 AccountCreditId = addTransactionFromBll.AccountCreditId, 
-                Communication = addTransactionFromBll.Communication  
+                Communication = addTransactionFromBll.Communication  ,
+                CategoryId = addTransactionFromBll.CategoryId
             };
         }
 
@@ -168,7 +170,8 @@ namespace BLL.Mappers
                 BudgetId = updateTransactionFromBll.BudgetId,
                 AccountDebitId = updateTransactionFromBll.AccountDebitId,
                 AccountCreditId = updateTransactionFromBll.AccountCreditId,
-                Communication = updateTransactionFromBll.Communication
+                Communication = updateTransactionFromBll.Communication,
+                CategoryId = updateTransactionFromBll.CategoryId
             };
         }
 
