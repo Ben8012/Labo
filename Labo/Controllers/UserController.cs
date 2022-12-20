@@ -63,11 +63,11 @@ namespace Labo.Controllers
         [HttpPost("Insert")]
         public IActionResult Insert(AddUserForm form)
         {
-            form.Password = "Test1234=";
-            form.Email = "benjamin@mail.com";
-            form.FirstName = "Benjamin";
-            form.LastName = "Sterckx";
-            form.Birthdate = new DateTime(1980,12,10);
+            //form.Password = "Test1234=";
+            //form.Email = "benjamin@mail.com";
+            //form.FirstName = "Benjamin";
+            //form.LastName = "Sterckx";
+            //form.Birthdate = new DateTime(1980,12,10);
             if (!ModelState.IsValid) return BadRequest(new {Message = "ModelState insert est invalide"});
 
             form.Password = BCrypt.Net.BCrypt.HashPassword(form.Password);
@@ -116,8 +116,8 @@ namespace Labo.Controllers
         [HttpPost("Login")]
         public IActionResult Login(LoginForm form)
         {
-            form.Email = "benjamin@mail.com";
-            form.Password = "Test1234=";
+            //form.Email = "benjamin@mail.com";
+            //form.Password = "Test1234=";
             if (!ModelState.IsValid) return BadRequest(new { Message = "ModelState Login est invalide" });
             try
             {

@@ -13,6 +13,29 @@ using Tools;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin();
+        policy.AllowAnyMethod();
+        policy.AllowAnyHeader();
+    });
+
+    //options.AddPolicy("admin", policy =>
+    //{
+    //    policy.SetIsOriginAllowed((origin) =>
+    //    {
+    //        var origins = new HashSet<string> { "api.technofutur.be" };
+
+    //        return origins.Contains(origin);
+    //    });
+    //});
+});
+
+
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -107,6 +130,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 
